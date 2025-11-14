@@ -1,7 +1,19 @@
 body {
-    background: #000 !important;
-    color: red !important;
+    background: #1c1c1c;
+    color: white;
+    display: flex;
+    flex-direction: column;
 }
-.vitaj {
-    background: #000 !important;
+
+html, body {
+    height: 100%;
+}
+
+#navbar {
+    background: #ffff;
+}
+
+#footer {
+    margin-top: auto;
+    background: grey !important;
 }

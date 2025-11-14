@@ -12,11 +12,12 @@
     <title>Bronze Gym - Template</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <link rel="stylesheet" href="/css/style.css">
 
 </head>
 <body>
-<nav class="navbar navbar-expand-lg bg-light border-bottom py-2">
+<nav class="navbar navbar-expand-lg bg-light border-bottom py-2" id="navbar">
     <div class="container-fluid d-flex justify-content-between">
 
         <!-- LEFT: Brand + Nav (now swapped to left, visually right → left) -->
@@ -56,11 +57,63 @@
     </div>
 </div>
 
-<div class="mt-auto bg-light text-center text-lg-start border-top py-3">
-    <div class="text-center p-3">
+<!-- FOOTER -->
+<div class="mt-auto bg-light text-dark text-center text-lg-start border-top py-4" id="footer">
+
+    <div class="container d-flex justify-content-center gap-5 flex-wrap">
+
+        <!-- TELEFÓN -->
+        <div class="d-flex align-items-start gap-2">
+            <i class="bi bi-telephone-fill fs-3"></i>
+            <div class="text-start">
+                <div class="fw-bold">Zavolaj nám</div>
+                <a href="tel:+421900000000" class="text-dark text-decoration-underline">+421 900 000 000</a>
+            </div>
+        </div>
+
+        <!-- EMAIL -->
+        <div class="d-flex align-items-start gap-2">
+            <i class="bi bi-envelope-fill fs-3"></i>
+            <div class="text-start">
+                <div class="fw-bold">Napíš nám</div>
+                <a href="mailto:info@bronzegym.sk" class="text-dark text-decoration-underline">info@bronzegym.sk</a>
+            </div>
+        </div>
+
+        <!-- FACEBOOK -->
+        <div class="d-flex align-items-start gap-2">
+            <i class="bi bi-facebook fs-3"></i>
+            <div class="text-start">
+                <div class="fw-bold">Facebook</div>
+                <a href="#" class="text-dark text-decoration-underline">/bronzegym</a>
+            </div>
+        </div>
+
+        <!-- INSTAGRAM -->
+        <div class="d-flex align-items-start gap-2">
+            <i class="bi bi-instagram fs-3"></i>
+            <div class="text-start">
+                <div class="fw-bold">Instagram</div>
+                <a href="#" class="text-dark text-decoration-underline">@bronzegym</a>
+            </div>
+        </div>
+
+        <!-- YOUTUBE -->
+        <div class="d-flex align-items-start gap-2">
+            <i class="bi bi-youtube fs-3"></i>
+            <div class="text-start">
+                <div class="fw-bold">YouTube</div>
+                <a href="#" class="text-dark text-decoration-underline">Bronze Gym</a>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="text-center mt-4 small">
         © 2025 Bronze Gym — All rights reserved.
     </div>
 </div>
+
 
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>

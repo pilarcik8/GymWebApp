@@ -4,12 +4,11 @@
 ?>
 
 <head>
-    <link rel="stylesheet" href="/css/style.css">
     <title>GymApp | Domov</title>
 </head>
 <body>
 
-<main class="vitaj">
+<main class="container py-5">
     <h1 class="text-center mb-4">Vitajte v našej posilňovni!</h1>
     <p class="lead text-center">Spravujte tréningy, permanentky a rezervácie jednoducho online.</p>
     <div class="text-center mt-4">
@@ -17,6 +16,5 @@
         <a href="/register" class="btn btn-outline-secondary">Registrovať</a>
     </div>
 </main>
-
 </body>
-</html>
+
