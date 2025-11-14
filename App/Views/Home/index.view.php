@@ -4,14 +4,12 @@
 ?>
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/style.css">
     <title>GymApp | Domov</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
 
-<main class="container py-5">
+<main class="vitaj">
     <h1 class="text-center mb-4">Vitajte v našej posilňovni!</h1>
     <p class="lead text-center">Spravujte tréningy, permanentky a rezervácie jednoducho online.</p>
     <div class="text-center mt-4">

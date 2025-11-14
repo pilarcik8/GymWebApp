@@ -1,41 +1,7 @@
 body {
-    font-family: 'Segoe UI', sans-serif;
-    background-color: #f7f8fa;
-    color: #333;
+    background: #000 !important;
+    color: red !important;
 }
-
-h1 {
-    color: #007bff;
-    font-weight: 700;
-}
-
-.btn-primary {
-    background-color: #007bff;
-    border: none;
-}
-
-.btn-primary:hover {
-    background-color: #0056b3;
-}
-
-html, body {
-    height: 100%;
-}
-
-body {
-    display: flex;
-    flex-direction: column;
-}
-
-.mt-auto {
-    margin-top: auto !important;
-}
-
-.brand-icon {
-    width: 28px;
-    height: 28px;
-}
-/* Reverse order on the left side now */
-.left-group {
-    flex-direction: row-reverse;
+.vitaj {
+    background: #000 !important;
 }
