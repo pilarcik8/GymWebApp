@@ -8,10 +8,9 @@
 </head>
 <body>
 
-<!-- HERO IMAGE -->
-<div class="hero">
-    <img src="/images/bezec-home.png" alt="Gym Hero" class="hero-img">
-    <div class="hero-text">Buď lepší JA</div>
+<div class="home-hero-div">
+    <img src="/images/bezec-home.png" alt="Beziaci muz" class="home-hero-img">
+    <div class="home-hero-text">Buď lepší JA</div>
 </div>
 
 <main class="container py-5">
