@@ -13,25 +13,23 @@
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <!-- Font Awesome Free -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="" crossorigin="anonymous">
     <link rel="stylesheet" href="/css/style.css">
 
 </head>
 <body>
-<nav class="navbar navbar-expand-lg bg-light border-bottom py-2" id="navbar">
+
+<!--header-->
+<nav class="navbar navbar-expand-lg bg-light py-2" id="navbar">
     <div class="container-fluid d-flex justify-content-between">
 
         <!-- LEFT: Brand + Nav (now swapped to left, visually right → left) -->
         <div class="d-flex align-items-center gap-3 left-group">
 
-            <!-- Navigation links -->
             <div class="navbar-nav d-flex flex-row gap-3">
-                <a href="/" class="d-flex align-items-center text-decoration-none fw-bold text-dark gap-2">
-                    <svg class="brand-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M2 12h2v2H2zM20 12h2v2h-2z" fill="#000"/>
-                        <rect x="4" y="9" width="16" height="6" rx="1" fill="#000"/>
-                        <rect x="0" y="10" width="4" height="4" rx="0.5" fill="#000"/>
-                        <rect x="20" y="10" width="4" height="4" rx="0.5" fill="#000"/>
-                    </svg>
+                <a href="/../App/Views/index.view.php" class="d-flex align-items-center text-decoration-none fw-bold text-dark gap-2">
+                    <i class="fa-solid fa-dumbbell fs-3" aria-hidden="true"></i>
                     BRONZE GYM
                 </a>
                 <a class="nav-link" href="/cennik">Tréneri</a>
@@ -42,10 +40,18 @@
 
         </div>
 
-        <!-- RIGHT: Log in / Sign up -->
-        <div class="d-flex gap-2">
-            <button class="btn btn-outline-secondary">Log in</button>
-            <button class="btn btn-primary">Sign up</button>
+        <!-- Sign In / Log In  -->
+        <div class="d-flex gap-2 align-items-stretch" id="login-signin-container">
+
+            <a href="/login" class="d-flex align-items-center gap-1 text-dark text-decoration-none p-2" style="min-width:90px; justify-content:center;">
+                <i class="fa-solid fa-user"></i>
+                <span class="nav-link">Sign In</span>
+            </a>
+
+            <a href="/register" class="d-flex align-items-center gap-1 text-dark text-decoration-none p-2" style="min-width:90px; justify-content:center;">
+                <span class="nav-link">Log In</span>
+            </a>
+
         </div>
 
     </div>

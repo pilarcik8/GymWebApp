@@ -10,10 +10,30 @@ html, body {
 }
 
 #navbar {
-    background: #ffff;
+    border: 3px solid #000000;
 }
 
 #footer {
     margin-top: auto;
     background: grey !important;
+}
+
+#login-signin-container {
+    border-left: 3px solid #000000 !important;
+}
+
+.nav-link {
+    font-family: 'Poppins', sans-serif;
+    color: #1b1717;
+    transition: color .2s;
+}
+
+.nav-link:hover {
+    color: #9f9809;
+}
+
+#ucet-icon {
+    width: 20px;
+    height: 20px;
+    line-height: 20px;
 }
