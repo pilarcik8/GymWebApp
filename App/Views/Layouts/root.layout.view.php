@@ -20,16 +20,16 @@
 </head>
 <body>
 
-<!--header-->
+<!--navbar-->
 <nav class="navbar navbar-expand-lg bg-light py-2" id="navbar">
     <div class="container-fluid d-flex justify-content-between">
 
-        <!-- LEFT: Brand + Nav (now swapped to left, visually right → left) -->
         <div class="d-flex align-items-center gap-3 left-group">
 
             <div class="navbar-nav d-flex flex-row gap-3">
-                <a href="/../App/Views/index.view.php" class="d-flex align-items-center text-decoration-none fw-bold text-dark gap-2">
-                    <i class="fa-solid fa-dumbbell fs-3" aria-hidden="true"></i>
+                <a id = "home-icon-name" href="/../App/Views/index.view.php" class="d-flex align-items-center text-decoration-none fw-bold text-dark gap-2">
+                    <!-- ikona dumbell-->
+                    <i class="fa-solid fa-dumbbell fa-lg" aria-hidden="true"></i>
                     BRONZE GYM
                 </a>
                 <a class="nav-link" href="/cennik">Tréneri</a>
@@ -44,7 +44,7 @@
         <div class="d-flex gap-2 align-items-stretch" id="login-signin-container">
 
             <a href="/login" class="d-flex align-items-center gap-1 text-dark text-decoration-none p-2" style="min-width:90px; justify-content:center;">
-                <i class="fa-solid fa-user"></i>
+                <i id="user-icon" class="fa-solid fa-user"></i>
                 <span class="nav-link">Sign In</span>
             </a>
 

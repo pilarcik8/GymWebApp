@@ -8,6 +8,12 @@
 </head>
 <body>
 
+<!-- HERO IMAGE -->
+<div class="hero">
+    <img src="/images/bezec-home.png" alt="Gym Hero" class="hero-img">
+    <div class="hero-text">Buď lepší JA</div>
+</div>
+
 <main class="container py-5">
     <h1 class="text-center mb-4">Vitajte v našej posilňovni!</h1>
     <p class="lead text-center">Spravujte tréningy, permanentky a rezervácie jednoducho online.</p>
@@ -16,5 +22,6 @@
         <a href="/register" class="btn btn-outline-secondary">Registrovať</a>
     </div>
 </main>
+
 </body>
 
