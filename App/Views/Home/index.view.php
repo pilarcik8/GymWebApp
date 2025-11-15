@@ -9,7 +9,7 @@
 
 <body>
 <div class="home-hero-div">
-    <img src="<?= $link->asset('/images/bezec-home.png') ?>" alt="Beziaci muz" class="hero-img">
+    <img src="<?= $link->asset('/images/home-hero.png') ?>" alt="Beziaci muz" class="hero-img">
     <div class="home-hero-text">
         <span class="hero-line-1">BUĎ LEPŠÍM JA</span>
         <br>
@@ -35,21 +35,16 @@
         </div>
 
         <div class="square-odd">
-            <h2 class="sq-title">Skupinové lekcie</h2>
-            <p class="sq-text">Dynamické tréningy pre všetky úrovne – od jógy po HIIT.</p>
-        </div>
-
-        <div class="square-even">
             <h2 class="sq-title">Osobný tréner</h2>
             <p class="sq-text">Individuálne plány a profesionálne vedenie na mieru.</p>
         </div>
 
-        <div class="square-odd">
+        <div class="square-even">
             <h2 class="sq-title">Regenerácia</h2>
             <p class="sq-text">Priestor na strečing a techniky pre rýchlejšiu obnovu.</p>
         </div>
 
-        <div class="square-even">
+        <div class="square-odd">
             <h2 class="sq-title">Poradenstvo</h2>
             <p class="sq-text">Pomoc pri výbere stravy, ktorá podporí tvoje ciele.</p>
         </div>

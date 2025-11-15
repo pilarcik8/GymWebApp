@@ -1,10 +1,10 @@
 /* HERO */
-.hero-wrapper {
+.hero-coaches-wrapper {
     position: relative;
     display: inline-block;
 }
 
-.text-bubble {
+.hero-text-container {
     position: absolute;
     top: 20%;
     left: 5%;
@@ -18,45 +18,75 @@
     border-radius: 6px;
 }
 
-.text-bubble span {
+.hero-text-yellow {
     color: #9f9809;
     font-weight: bold;
 }
 
 /* Treneri */
-.custom-section {
+
+.koso-name {
+    color: black;
+    font-weight: 1000;
+}
+
+.koso-popisok {
+    color: #302e2e;;
+}
+
+.row-section {
     display: flex;
     align-items: center;
-}
-
-.left-side {
+    justify-content: center;
+    margin-top: 20px;
+    margin-bottom: 20px;
     position: relative;
-    width: 300px;    /* môžeš meniť */
-    height: 300px;
 }
 
-/* Štvorec */
-.square {
-    width: 100%;
-    height: 100%;
-    background: #000;       /* farba štvorca */
-    border: 3px solid #ffea00;
-    box-sizing: border-box;
+/* Obrázok */
+.section-image {
+    width: auto;
+    height: auto;
+    position: relative;
+    z-index: 1; /* obrázok nižšie */
 }
 
-/* Pravouhlý trojuholník vľavo hore */
-.cut-triangle {
-    position: absolute;
-    top: 0;
-    left: -150px;   /* posunie trojuholník tak, aby sa "zarezával" do štvorca */
-    width: 0;
-    height: 0;
-    border-top: 150px solid #000;     /* farba trojuholníka */
-    border-right: 150px solid transparent;
+/* --- KOSODĹŽNIK --- */
+.parallelogram {
+    width: 500px;
+    height: 260px;
+    background: #9f9809;
+    transform: skewX(-15deg);
+    display: flex;
+    align-items: center;
+    padding: 30px;
+    position: absolute;  /* umožní prekrytie obrázka */
+    z-index: 3;          /* nad obrázkom */
 }
 
-/* Obrázok napravo */
-.right-image {
-    width: 400px;   /* podľa potreby */
-    margin-left: 30px;
+.parallelogram-content {
+    transform: skewX(15deg);
+    color: white;
+    font-size: 20px;
+    font-family: sans-serif;
 }
+
+/* 🔵 SEKCIA 1 — obrázok vpravo, kosodĺžnik do neho zasahuje zľava */
+.section-left-koso #img1 {
+    margin-left: 500px; /* posunie obrázok doprava */
+}
+
+.section-left-koso #koso1 {
+    left: calc(50% - 350px);
+}
+
+/* 🔵 SEKCIA 2 — obrázok vľavo, kosodĺžnik zasahuje sprava */
+.section-right-koso #img2 {
+    margin-right: 500px;
+}
+
+.section-right-koso #koso2 {
+    right: calc(50% - 350px);
+}
+
+

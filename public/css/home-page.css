@@ -66,6 +66,7 @@
 
 .square-odd {
     background: #ffffff;
+    border: 4px solid #9f9809;
 }
 
 .square-odd,
@@ -137,13 +138,12 @@
 }
 
 .carousel-indicators button {
-    background-color: #FFD700; /* žlté pre neaktívne */
+    background-color: #9f9809; /* žlté pre neaktívne */
 }
 
 .carousel-indicators .active {
     background-color: #ffffff; /* biely pre aktívny */
 }
-
 
 /* MAPA */
 
