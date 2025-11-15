@@ -13,6 +13,7 @@
     <div class="home-hero-text">Buď lepší JA</div>
 </div>
 
+<div class="co-ponukame-wrapper">
 <div class="co-ponukame">
     <div class="square-odd">
         <h2 class="sq-title">Silový tréning</h2>
@@ -48,21 +49,7 @@
         <h2 class="sq-title">Meranie telesných parametrov</h2>
         <p class="sq-text">Analýza tuku, svalovej hmoty a pokroku.</p>
     </div>
-
-    <div class="square-even">
-        <h2 class="sq-title">Funkčná zóna</h2>
-        <p class="sq-text">Priestor s pomôckami na dynamický a funkčný tréning.</p>
-    </div>
-
-    <div class="square-odd">
-        <h2 class="sq-title">Relax zóna</h2>
-        <p class="sq-text">Miesto na oddych po náročnom tréningu.</p>
-    </div>
-
-    <div class="square-even">
-        <h2 class="sq-title">Tréning pre začiatočníkov</h2>
-        <p class="sq-text">Jednoduché a bezpečné plány pre každého, kto začína.</p>
-    </div>
+</div>
 </div>
 
 

@@ -17,7 +17,7 @@ html, body {
     top: 0;
     left: 0;
     width: 100%;
-    height: 300px;  /* TODO zmen */
+    height: 100px;  /* TODO zmen */
     z-index: 9999; /* aby bol nad obsahom */
 }
 
@@ -29,7 +29,7 @@ html, body {
 }
 
 html {
-    font-size: clamp(14px, 2vw, 50px); /* (minimálny, preferovaný, maximálny) TODO Skotroluj ako funguje */
+    font-size: clamp(14px, 2vw, 25px); /* (minimálny, preferovaný, maximálny) TODO Skotroluj ako funguje */
 }
 
 .nav-link:hover {
@@ -46,7 +46,7 @@ html {
 }
 
 .home-hero-img {
-    margin-top: 90px; /* TODO zmen */
+    margin-top: 70px; /* TODO zmen */
     width: 100%;
     height: auto;
     display: block;
@@ -69,14 +69,10 @@ html {
 }
 
 .co-ponukame {
-    position: relative;
-    top: 50px;
-    width: 100%;
     display: flex;
-    gap: 20px;
+    gap: 50px;
+    padding-left: 100%; /* posun na štart od pravej strany */
     animation: moveLine 25s linear infinite;
-
-    flex-wrap: nowrap;
 }
 
 .square-even {
@@ -89,8 +85,8 @@ html {
 
 .square-odd, .square-even {
     flex: 0 0 auto;
-    width: 800px;
-    height: 400px;
+    width: 350px;
+    height: 200px;
     margin-left: 50px;
     border-radius: 30px;
     color: #070303;
@@ -98,10 +94,10 @@ html {
 
 @keyframes moveLine {
     0% {
-        transform: translateX(100%);
+        transform: translateX(0);
     }
     100% {
-        transform: translateX(-100%);
+        transform: translateX(-400%); /* odíde úplne za ľavý okraj */
     }
 }
 
@@ -116,6 +112,12 @@ html {
     font-size: 1rem;
     margin: 0 20px;
     font-family: 'Poppins', sans-serif;
+}
+
+.co-ponukame-wrapper {
+    width: 100%;
+    overflow: hidden;  /* skryje len keď animácia prekročí okraj */
+    position: relative;
 }
 
 
