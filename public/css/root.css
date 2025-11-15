@@ -40,14 +40,14 @@ body {
     color: #9f9809;
 }
 
+/* Login / signin right border */
+#login-signin-container {
+    border-left: 3px solid #000000 !important;
+}
+
 /* ---------- FOOTER ---------- */
 
 #footer {
     margin-top: auto;
     background: grey !important;
-}
-
-/* Login / signin right border */
-#login-signin-container {
-    border-left: 3px solid #000000 !important;
 }

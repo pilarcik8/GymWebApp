@@ -143,6 +143,15 @@
     color: #cccccc;
 }
 
+.carousel-indicators button {
+    background-color: #FFD700; /* žlté pre neaktívne */
+}
+
+.carousel-indicators .active {
+    background-color: #ffffff; /* biely pre aktívny */
+}
+
+
 /* MAPA */
 
 .map {
