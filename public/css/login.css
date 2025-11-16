@@ -1,0 +1,73 @@
+/* Celá sekcia s pozadím */
+.container {
+    max-width: 100%;
+    padding: 0;
+}
+
+.login-hero {
+    width: 100%;
+    height: 600px;
+    background: url('/images/main-background.jpg') center/cover no-repeat;
+    display: flex;
+    align-items: center;
+    padding-left: 10%;
+    color: white;
+    position: relative;
+}
+
+/* Nadpis PRIHLÁSENIE */
+#title {
+    font-size: 50px;
+    font-weight: 700;
+    margin-bottom: 30px;
+    color: white;
+    width: auto;
+    height: auto;
+}
+
+/* Login karta */
+.card-signin {
+    background: transparent;
+    border: none;
+    width: 350px;
+    padding-top: 40px;
+}
+
+/* Inputy */
+.card-signin .form-control {
+    background: rgba(255, 255, 255, 0.85);
+    border: none;
+    height: 45px;
+    font-size: 16px;
+}
+
+/* Log in tlačidlo */
+.card-signin button {
+    background: #0ea30e;
+    border: none;
+    padding: 10px 30px;
+    font-size: 16px;
+    font-weight: bold;
+    width: 50%;
+    border-radius: 4px;
+}
+
+.card-signin button:hover {
+    background: #0c8d0c;
+}
+
+/* Textové nadpisy a labels */
+.card-signin label,
+.card-signin h5 {
+    color: white;
+}
+
+/* Aby login box nebol úplne nalepený hore */
+.row {
+    margin-top: 120px;
+}
+
+/* Skryť default card border/shadow */
+.card {
+    box-shadow: none !important;
+}

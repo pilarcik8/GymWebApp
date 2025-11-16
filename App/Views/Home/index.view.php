@@ -1,13 +1,14 @@
 <?php
 /** @var \Framework\Support\LinkGenerator $link */
+/** @var \Framework\Support\View $view */
+
+$view->setLayout('root');
 ?>
 
 <head>
-    <title>GymApp | Domov</title>
     <link rel="stylesheet" href="<?= $link->asset('/css/home-page.css') ?>">
 </head>
 
-<body>
 <div class="home-hero-div">
     <img src="<?= $link->asset('/images/home-hero.png') ?>" alt="Beziaci muz" class="hero-img">
     <div class="home-hero-text">
@@ -101,5 +102,5 @@
 <div class="map">
     <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2191.8254369133188!2d18.75455428248802!3d49.20939143362418!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4714594c3d8ab747%3A0x81aa846c95c9eabf!2s%C3%9Astav%20telesnej%20v%C3%BDchovy%20%C5%BDilinskej%20univerzity%20v%20%C5%BDiline!5e0!3m2!1ssk!2ssk!4v1763224783343!5m2!1ssk!2ssk" width="1000" height="250" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
 </div>
-</body>
+
 

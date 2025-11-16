@@ -1,13 +1,14 @@
 <?php
 /** @var \Framework\Support\LinkGenerator $link */
+/** @var \Framework\Support\View $view */
+
+$view->setLayout('root');
 ?>
 
 <head>
-    <title>Treneri</title>
     <link rel="stylesheet" href="<?= $link->asset('/css/coaches.css') ?>">
 </head>
 
-<body>
 
 <!-- Hero -->
 <div class="hero-coaches-wrapper">
@@ -72,5 +73,3 @@
 
     <img src="<?= $link->asset('/images/coach-3.png') ?>" alt="trener3" class="section-image-right">
 </section>
-
-</body>
