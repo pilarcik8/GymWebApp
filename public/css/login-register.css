@@ -1,11 +1,11 @@
 /* Celá sekcia s pozadím */
 .login-hero {
     background-image: url('/images/main-background.jpg');
-    background-color: #cccccc; /* Used if the image is unavailable */
-    height: 600px; /* You must set a specified height */
-    background-position: center; /* Center the image */
-    background-repeat: no-repeat; /* Do not repeat the image */
-    background-size: cover; /* Resize the background image to cover the entire container */
+    background-color: #cccccc;
+    min-height: 600px;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
 
     display: flex;
     padding-left: 10%;

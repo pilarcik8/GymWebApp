@@ -1,6 +1,7 @@
 .permits-hero {
+    width: 100%;
+    min-height: 600px;
     background-image: url('/images/permits-background.jpg');
-    height: 600px;
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
