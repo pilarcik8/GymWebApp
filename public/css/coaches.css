@@ -10,9 +10,9 @@
     left: 5%;
     background: black;
     color: white;
-    margin-top: 50px;
-    padding: 50px 30px;
-    border: 2px solid #9f9809;
+    margin-top: 1rem;
+    padding: 1rem 0.5rem;
+    border: 0.2rem solid #9f9809;
     font-size: 24px;
     width: 420px;
     border-radius: 6px;
@@ -21,6 +21,25 @@
 .hero-text-yellow {
     color: #9f9809;
     font-weight: bold;
+}
+
+.hero-img {
+    margin-top: 2.5rem;
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* Skryť obrázok na mobiloch */
+@media (max-width: 630px) {
+    .hero-img {
+        height: 14rem;
+        visibility: hidden;
+    }
+
+    .hero-text-container {
+        width: auto;
+    }
 }
 
 /* TRENERY */

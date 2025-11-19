@@ -3,6 +3,21 @@
     position: relative;
 }
 
+.hero-img {
+    margin-top: 2.5rem;
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* Skryť obrázok na mobiloch */
+@media (max-width: 630px) {
+    .hero-img {
+        height: 14rem;
+        visibility: hidden;
+    }
+}
+
 .home-hero-text {
     position: absolute;
     top: 50%;

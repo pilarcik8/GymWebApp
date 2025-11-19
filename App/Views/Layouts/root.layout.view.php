@@ -28,42 +28,51 @@
 <body>
 
 <!--navbar-->
-<nav class="navbar navbar-expand-lg bg-light py-2" id="navbar">
+<nav class="navbar navbar-expand-xxl bg-light py-2" id="navbar"> <!-- tu rozhodujem kedi sa zmeni navbar -->
     <div class="container-fluid d-flex justify-content-between">
 
-        <div class="d-flex align-items-center gap-3 left-group">
+        <a id="home-icon-name" href="<?= $link->url("home.index") ?>"
+           class="navbar-brand d-flex align-items-center text-dark fw-bold gap-2">
+            <i class="fa-solid fa-dumbbell fa-lg"></i>
+            BRONZE GYM
+        </a>
 
-            <div class="navbar-nav d-flex flex-row gap-3">
-                <a id = "home-icon-name" href="<?= $link->url("home.index") ?>" class="d-flex align-items-center text-decoration-none fw-bold text-dark gap-2">
-                    <!-- ikona dumbell-->
-                    <i class="fa-solid fa-dumbbell fa-lg" aria-hidden="true"></i>
-                    BRONZE GYM
-                </a>
+        <!-- Toggler pre mobil -->
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#mobileNav"
+                aria-controls="mobileNav" aria-expanded="false" aria-label="Menu">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- MENU -->
+        <div class="collapse navbar-collapse" id="mobileNav">
+
+            <div class="navbar-nav ms-auto gap-lg-3">
+
                 <a class="nav-link" href="<?= $link->url("home.coaches") ?>">Tréneri</a>
                 <a class="nav-link" href="<?= $link->url('home.permits') ?>">Pernamentky</a>
                 <a class="nav-link" href="<?= $link->url('home.group_classes') ?>">Skupinové hodiny</a>
                 <a class="nav-link" href="<?= $link->url('home.gallery') ?>">Galéria</a>
+
+                <hr class="d-lg-none">
+
+                <!-- Login / Sign in (mobil verzia) -->
+                <a id="login-signin-container" href="<?= $link->url("auth.register") ?>" class="nav-link">
+                    <i class="fa-solid fa-user"></i>
+                    Sign In
+                </a>
+
+                <a href="<?= $link->url("auth.login") ?>" class="nav-link">
+                    Log In
+                </a>
+
             </div>
 
         </div>
-
-        <!-- Sign In / Log In  -->
-        <div class="d-flex gap-2 align-items-stretch" id="login-signin-container">
-
-            <a href="<?= $link->url("auth.register") ?>" class="d-flex align-items-center gap-1 text-dark text-decoration-none p-2" style="min-width:90px; justify-content:center;">
-                <i id="user-icon" class="fa-solid fa-user"></i>
-                <span class="nav-link">Sign In</span>
-            </a>
-
-            <a href="<?= $link->url("auth.login") ?>" class="d-flex align-items-center gap-1 text-dark text-decoration-none p-2" style="min-width:90px; justify-content:center;">
-                <span class="nav-link">Log In</span>
-            </a>
-
-        </div>
-
     </div>
 </nav>
 
+<!-- CONTENT -->
 <div class="container-fluid mt-3">
     <div class="web-content">
         <?= $contentHTML ?>
