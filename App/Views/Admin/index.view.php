@@ -8,7 +8,7 @@
     <div class="row">
         <div class="col">
             <div>
-                Welcome, <strong><?= $auth->user->name ?></strong>!<br><br>
+                Welcome, <strong><?= $auth->account->email ?></strong>!<br><br>
                 This part of the application is accessible only after logging in.
             </div>
         </div>
