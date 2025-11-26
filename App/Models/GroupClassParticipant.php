@@ -2,15 +2,26 @@
 
 namespace App\Models;
 
-class GroupClassParticipant
-{
-    public function __construct(
-        public int $customer_id,
-        public int $group_class_id,
-        public string $customer_note = ''
-    ) {}
+use Framework\Core\Model;
 
-    public function getCustomerId(): int
+class GroupClassParticipant extends Model
+{
+    protected ?int $id = null;
+    protected ?int $customer_id = null;
+    protected ?int $group_class_id = null;
+    protected ?string $customer_note = '';
+
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
+    public function setId(int $id): void
+    {
+        $this->id = $id;
+    }
+
+    public function getCustomerId(): ?int
     {
         return $this->customer_id;
     }
@@ -20,7 +31,7 @@ class GroupClassParticipant
         $this->customer_id = $customer_id;
     }
 
-    public function getGroupClassId(): int
+    public function getGroupClassId(): ?int
     {
         return $this->group_class_id;
     }
@@ -30,7 +41,7 @@ class GroupClassParticipant
         $this->group_class_id = $group_class_id;
     }
 
-    public function getCustomerNote(): string
+    public function getCustomerNote(): ?string
     {
         return $this->customer_note;
     }

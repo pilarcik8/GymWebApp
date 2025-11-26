@@ -2,17 +2,14 @@
 
 namespace App\Models;
 
-use Framework\Core\IIdentity;
+use Framework\Core\Model;
 
-class GroupClass implements IIdentity
-{
-    public function __construct(
-        public ?int $id = null,
-        public string $name = '',
-        public string $date = '',
-        public int $duration_minutes = 0,
-        public int $trainer_id = 0
-    ) {}
+class GroupClass extends Model {
+    protected ?int $id = null;
+    protected string $name = '';
+    protected string $date = '';
+    protected int $duration_minutes = 0;
+    protected int $trainer_id = 0;
 
     public function getId(): ?int
     {

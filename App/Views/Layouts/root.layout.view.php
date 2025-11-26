@@ -55,18 +55,47 @@
 
                 <hr class="d-lg-none">
 
-                <!-- Login / Sign in (mobil verzia) -->
-                <a id="login-signin-container" href="<?= $link->url("auth.register") ?>" class="nav-link">
-                    <i class="fa-solid fa-user"></i>
-                    Sign In
-                </a>
+                <?php if ($user->isLoggedIn()) { ?>
 
-                <a href="<?= $link->url("auth.login") ?>" class="nav-link">
-                    Log In
-                </a>
+                    <!-- DROPDOWN PRIHLÁSENÉHO POUŽÍVATEĽA -->
+                    <div class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle fw-bold d-flex align-items-center gap-1"
+                           href="#"
+                           role="button"
+                           data-bs-toggle="dropdown"
+                           aria-expanded="false">
+                            <i class="fa-solid fa-user"></i>
+                            <?= $user->getName() ?>
+                        </a>
+
+                        <ul class="dropdown-menu">
+
+                            <!-- TODO: Dalsie linky tu -->
+
+                            <li>
+                                <a class="dropdown-item text-danger" href="<?= $link->url("auth.logout") ?>">
+                                    <i class="fa-solid fa-right-from-bracket"></i> Log Out
+                                </a>
+                            </li>
+
+                        </ul>
+                    </div>
+
+                <?php } else { ?>
+
+                    <!-- NEPRIHLÁSENÝ POUŽÍVATEĽ -->
+                    <a id="login-signin-container" href="<?= $link->url("auth.register") ?>" class="nav-link">
+                        <i class="fa-solid fa-user"></i>
+                        Sign In
+                    </a>
+
+                    <a href="<?= $link->url("auth.login") ?>" class="nav-link">
+                        Log In
+                    </a>
+
+                <?php } ?>
 
             </div>
-
         </div>
     </div>
 </nav>
