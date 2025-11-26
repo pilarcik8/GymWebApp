@@ -27,11 +27,11 @@
 <body>
 
 <!--navbar-->
-<nav class="navbar navbar-expand-xxl bg-light py-2" id="navbar"> <!-- tu rozhodujem kedi sa zmeni navbar -->
+<nav class="navbar navbar-expand-lg bg-body-tertiary">
     <div class="container-fluid d-flex justify-content-between">
 
         <a id="home-icon-name" href="<?= $link->url("home.index") ?>"
-           class="navbar-brand d-flex align-items-center text-dark fw-bold gap-2">
+           class="navbar-brand d-flex align-items-center text-dark fw-bold">
             <i class="fa-solid fa-dumbbell fa-lg"></i>
             BRONZE GYM
         </a>
@@ -46,7 +46,7 @@
         <!-- MENU -->
         <div class="collapse navbar-collapse" id="mobileNav">
 
-            <div class="navbar-nav ms-auto gap-lg-3">
+            <div class="navbar-nav ms-auto">
 
                 <a class="nav-link" href="<?= $link->url("home.coaches") ?>">Tréneri</a>
                 <a class="nav-link" href="<?= $link->url('home.permits') ?>">Pernamentky</a>
@@ -88,7 +88,7 @@
             <i class="bi bi-telephone-fill fs-3"></i>
             <div class="text-start">
                 <div class="fw-bold">Zavolaj nám</div>
-                <a href="tel:+421900000000" class="text-dark text-decoration-underline">+421 900 000 000</a>
+                <a href="/" class="text-dark text-decoration-underline">+421 900 000 000</a>
             </div>
         </div>
 
@@ -97,7 +97,7 @@
             <i class="bi bi-envelope-fill fs-3"></i>
             <div class="text-start">
                 <div class="fw-bold">Napíš nám</div>
-                <a href="mailto:info@bronzegym.sk" class="text-dark text-decoration-underline">info@bronzegym.sk</a>
+                <a href="/" class="text-dark text-decoration-underline">info@bronzegym.sk</a>
             </div>
         </div>
 
@@ -106,7 +106,7 @@
             <i class="bi bi-facebook fs-3"></i>
             <div class="text-start">
                 <div class="fw-bold">Facebook</div>
-                <a href="#" class="text-dark text-decoration-underline">/bronzegym</a>
+                <a href="/" class="text-dark text-decoration-underline">/bronzegym</a>
             </div>
         </div>
 
@@ -115,7 +115,7 @@
             <i class="bi bi-instagram fs-3"></i>
             <div class="text-start">
                 <div class="fw-bold">Instagram</div>
-                <a href="#" class="text-dark text-decoration-underline">@bronzegym</a>
+                <a href="/" class="text-dark text-decoration-underline">@bronzegym</a>
             </div>
         </div>
 
@@ -124,14 +124,14 @@
             <i class="bi bi-youtube fs-3"></i>
             <div class="text-start">
                 <div class="fw-bold">YouTube</div>
-                <a href="#" class="text-dark text-decoration-underline">Bronze Gym</a>
+                <a href="/" class="text-dark text-decoration-underline">Bronze Gym</a>
             </div>
         </div>
 
     </div>
 
     <div class="text-center mt-4 small">
-        © 2025 Bronze Gym — All rights reserved.
+        © <?php echo date("Y"); ?> Bronze Gym — All rights reserved.
     </div>
 </div>
 </body>

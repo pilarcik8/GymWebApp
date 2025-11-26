@@ -8,6 +8,7 @@ $view->setLayout('root');
 
 <head>
     <link rel="stylesheet" href="<?= $link->asset('/css/login-register.css') ?>">
+    <script src="<?= $link->asset('js/script.js') ?>"></script>
 </head>
 
 <div class="login-hero">
@@ -35,7 +36,7 @@ $view->setLayout('root');
                 </div>
 
                 <div class="form-label-group mb-3">
-                    <input name="password" type="password" id="password" class="form-control" placeholder="Znova Heslo" required>
+                    <input name="password-confirm" type="password" id="password_confirm" class="form-control" placeholder="Znova Heslo" required>
                 </div>
                 <button class="btn btn-primary button-green" type="submit" name="submit">SIGN IN</button>
             </form>
