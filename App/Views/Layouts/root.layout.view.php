@@ -32,7 +32,7 @@
 
         <a id="home-icon-name" href="<?= $link->url("home.index") ?>"
            class="navbar-brand d-flex align-items-center text-dark fw-bold">
-            <i class="fa-solid fa-dumbbell fa-lg"></i>
+            <i class="fa-solid fa-dumbbell fa-lg gap-1"></i>
             BRONZE GYM
         </a>
 

@@ -110,16 +110,15 @@
 /* OBRAZOKY SPULU A OTVARAJUCE HODINY*/
 
 .opening-hours-container {
+    margin: 2rem;
     display: flex;
     gap: 3rem;               /* medzera medzi obr a text */
     flex-wrap: wrap;          /* aby sa na mobiloch stĺpce zoradili pod seba */
-    margin-top: 2rem;
-
     align-items: center;
 }
 
 .opening-hours-image {
-    flex: 1 1 400px;         /* min. šírka 400px, flexibilné */
+    flex: 1 1 500px;         /* min. šírka 400px, flexibilné */
 }
 
 .opening-hours img {
