@@ -21,6 +21,14 @@
     <!-- Font Awesome Free -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="" crossorigin="anonymous">
 
+    <!-- Favicons -->
+    <link rel="apple-touch-icon" sizes="180x180" href="<?= $link->asset('favicons/192x192.png') ?>">
+    <link rel="icon" type="image/png" sizes="32x32" href="<?= $link->asset('favicons/32x32.png') ?>">
+    <link rel="icon" type="image/png" sizes="16x16" href="<?= $link->asset('favicons/16x16.png') ?>">
+    <link rel="manifest" href="<?= $link->asset('favicons/site.webmanifest') ?>">
+    <link rel="shortcut icon" href="<?= $link->asset('favicons/16x16.ico') ?>">
+
+    <!-- CSS, JS -->
     <link rel="stylesheet" href="<?= $link->asset('/css/root.css') ?>">
     <script src="<?= $link->asset('js/script.js') ?>"></script>
 </head>

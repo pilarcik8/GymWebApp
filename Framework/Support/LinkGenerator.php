@@ -106,7 +106,7 @@ class LinkGenerator
      * Examples:
      * - asset('css/auth.css')               // relative to app base path
      * - asset('/css/auth.css')              // leading slash is normalized
-     * - asset('favicons/favicon-32x32.png') // favicon path
+     * - asset('favicons/32x32.png') // favicon path
      * - asset('js/app.js', true)            // absolute URL with scheme and host
      */
     public function asset(string $path, bool $absolute = false): string
