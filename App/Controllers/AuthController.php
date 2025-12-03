@@ -85,8 +85,7 @@ class AuthController extends BaseController
 
     public function register(Request $request): Response
     {
-        $errors = [];
-
+        $message = null;
         if ($request->hasValue('register')) {
             $email = trim($request->value('email'));
             $first_name = trim($request->value('first_name'));
@@ -95,47 +94,34 @@ class AuthController extends BaseController
             $password2 = $request->value('password2');
 
             if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                $errors[] = "Invalid email format";
+                $message = "Invalid email format";
+                return $this->html(compact("message"));
             }
             if (strlen($password) < 6) {
-                $errors[] = "Password must have at least 6 characters";
+                $message = "Password must have at least 6 characters";
+                return $this->html(compact("message"));
             }
             if ($password !== $password2) {
-                $errors[] = "Passwords do not match";
+                $message = "Passwords do not match";
+                return $this->html(compact("message"));
             }
 
-            if (empty($errors)) {
-                $existingUsers = Account::getAll('`email` = ?', [$email]);
-                if (!empty($existingUsers)) {
-                    $errors[] = "User with this email already exists";
-                }
+            $existingUsers = Account::getCount('`email` = ?', [$email]);
+            if ($existingUsers > 0) {
+                $message = "User with this email already exists";
+                return $this->html(compact("message"));
             }
+            $hash = password_hash($password, PASSWORD_DEFAULT);
 
-            if (empty($errors)) {
-                $hash = password_hash($password, PASSWORD_DEFAULT);
+            $userModel = new Account();
+            $userModel->setEmail($email);
+            $userModel->setPassword($hash);
+            $userModel->setFirstName($first_name);
+            $userModel->setLastName($last_name);
 
-                $userModel = new Account();
-                $userModel->setEmail($email);
-                $userModel->setPassword($hash);
-                $userModel->setFirstName($first_name);
-                $userModel->setLastName($last_name);
-                $userModel->setRole('customer');
-
-                try {
-                    // save() returns void and throws on error
-                    $userModel->save();
-
-                    // saved ok — redirect to login page
-                    return $this->redirect(Configuration::LOGIN_URL . '?registered=1');
-                } catch (\Exception $e) {
-                    error_log("Registration save failed: " . $e->getMessage());
-                    $errors[] = "Registration failed: " . $e->getMessage();
-                }
-            }
+            $userModel->save();
+            return $this->redirect($this->url("auth.login"));
         }
-
-        return $this->html([
-            "errors" => $errors
-        ]);
+        return $this->html(compact("message"));
     }
 }

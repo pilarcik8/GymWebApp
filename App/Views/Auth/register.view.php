@@ -17,7 +17,7 @@ $view->setLayout('root');
             <div class="text-center text-danger mb-3">
                 <?= @$message ?>
             </div>
-            <form class="form-signin" method="post" action="<?= $link->url("login") ?>">
+            <form class="form-signin" method="post" action="<?= $link->url("register") ?>">
                 <div class="form-label-group mb-3">
                     <input name="first_name" type="text" id="first_name" class="form-control" placeholder="Meno" required autofocus>
                 </div>
