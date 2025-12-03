@@ -1,0 +1,15 @@
+h4 {
+    margin-top: 1.5rem;
+    font-weight: 600;
+    font-size: 3rem;
+    color: #ffffff;
+}
+
+#div-table {
+    margin-top: 2rem;
+    max-height: 360px;
+    overflow-y: auto;
+    border: 1px solid #ddd;
+    padding: 8px;
+    border-radius:4px;
+}

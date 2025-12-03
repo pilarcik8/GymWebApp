@@ -36,11 +36,16 @@ function acc_field($acc, string $field)
     return null;
 }
 ?>
+
+<head>
+    <link rel="stylesheet" href="<?= $link->asset('/css/admin.css') ?>">
+</head>
+
 <div class="container-fluid">
     <div class="row">
         <div class="col">
             <h4>Accounts</h4>
-            <div style="max-height: 360px; overflow-y: auto; border: 1px solid #ddd; padding: 8px; border-radius:4px;">
+            <div id="div-table">
                 <table class="table table-sm table-striped mb-0">
                     <thead>
                     <tr>
