@@ -19,11 +19,11 @@ $view->setLayout('root');
             </div>
             <form class="form-signin" method="post" action="<?= $link->url("login") ?>">
                 <div class="form-label-group mb-3">
-                    <input name="name" type="text" id="name" class="form-control" placeholder="Meno" required autofocus>
+                    <input name="first_name" type="text" id="first_name" class="form-control" placeholder="Meno" required autofocus>
                 </div>
 
                 <div class="form-label-group mb-3">
-                    <input name="last-name" type="text" id="last-name" class="form-control" placeholder="Priezvisko" required autofocus>
+                    <input name="last_name" type="text" id="last_name" class="form-control" placeholder="Priezvisko" required autofocus>
                 </div>
 
                 <div class="form-label-group mb-3">
@@ -35,9 +35,9 @@ $view->setLayout('root');
                 </div>
 
                 <div class="form-label-group mb-3">
-                    <input name="password-confirm" type="password" id="password-confirm" class="form-control" placeholder="Znova Heslo" required>
+                    <input name="password2" type="password" id="password2" class="form-control" placeholder="Znova Heslo" required>
                 </div>
-                <button class="btn btn-primary button-green" type="submit" name="submit">SIGN IN</button>
+                <button class="btn btn-primary button-green" type="submit" name="register">SIGN IN</button>
             </form>
         </div>
     </div>

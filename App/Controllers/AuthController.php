@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Configuration;
+use App\Models\Account;
 use Exception;
 use Framework\Core\BaseController;
 use Framework\Http\Request;
@@ -64,16 +65,77 @@ class AuthController extends BaseController
      * tokens or session data associated with the user.
      *
      * @return ViewResponse The response object that renders the logout view.
+     * @throws Exception
      */
     public function logout(Request $request): Response
     {
         $this->app->getAuthenticator()->logout();
-        return $this->html();
+        return $this->redirect($this->url("home.index"));
     }
+
+    /**
+     * Logs out the current user.
+     *
+     * This action terminates the user's session and redirects them to a view. It effectively clears any authentication
+     * tokens or session data associated with the user.
+     *
+     * @return ViewResponse The response object that renders the logout view.
+     * @throws Exception
+     */
 
     public function register(Request $request): Response
     {
-        //TODO THIS
-        return $this->html();
+        $errors = [];
+
+        if ($request->hasValue('register')) {
+            $email = trim($request->value('email'));
+            $first_name = trim($request->value('first_name'));
+            $last_name = trim($request->value('last_name'));
+            $password = $request->value('password');
+            $password2 = $request->value('password2');
+
+            if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                $errors[] = "Invalid email format";
+            }
+            if (strlen($password) < 6) {
+                $errors[] = "Password must have at least 6 characters";
+            }
+            if ($password !== $password2) {
+                $errors[] = "Passwords do not match";
+            }
+
+            if (empty($errors)) {
+                $existingUsers = Account::getAll('`email` = ?', [$email]);
+                if (!empty($existingUsers)) {
+                    $errors[] = "User with this email already exists";
+                }
+            }
+
+            if (empty($errors)) {
+                $hash = password_hash($password, PASSWORD_DEFAULT);
+
+                $userModel = new Account();
+                $userModel->setEmail($email);
+                $userModel->setPassword($hash);
+                $userModel->setFirstName($first_name);
+                $userModel->setLastName($last_name);
+                $userModel->setRole('customer');
+
+                try {
+                    // save() returns void and throws on error
+                    $userModel->save();
+
+                    // saved ok — redirect to login page
+                    return $this->redirect(Configuration::LOGIN_URL . '?registered=1');
+                } catch (\Exception $e) {
+                    error_log("Registration save failed: " . $e->getMessage());
+                    $errors[] = "Registration failed: " . $e->getMessage();
+                }
+            }
+        }
+
+        return $this->html([
+            "errors" => $errors
+        ]);
     }
 }

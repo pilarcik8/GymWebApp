@@ -2,6 +2,7 @@
 
 namespace Framework\Auth;
 
+use App\Models\Account;
 use Framework\Core\App;
 use Framework\Core\IIdentity;
 

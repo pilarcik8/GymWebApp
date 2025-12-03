@@ -68,7 +68,8 @@ CREATE TABLE `trainings` (
 
 INSERT INTO `accounts` (`id`, `role`, `first_name`, `last_name`, `email`, `password`, `credit`)
 VALUES
-    (1, 'admin', 'Michal', 'Pilarčík', 'admin@admin.sk', 'admin', 1000),
+    (1, 'admin', 'Jozef', 'Piaček', 'admin@admin.sk', 'admin', 1000),
     (2, 'trainer', 'Jana', 'Nováková', 'trener@trener.sk', 'trener', 500),
     (3, 'customer', 'Peter', 'Kováč', 'zakaznik@zakaznik.sk', 'zakaznik', 200),
     (4, 'reception', 'Lucia', 'Horváthová', 'recepcia@recepcia.sk', 'recepcia', 0);
+

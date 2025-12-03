@@ -1,36 +1,32 @@
 <?php
 
-namespace Framework\Auth;
+namespace App\Models;
 
 use Framework\Core\IIdentity;
+use Framework\Core\Model;
 
-class Account implements IIdentity
+class Account extends Model implements IIdentity
 {
-    private ?int $id = null;
-    private string $role = 'customer';
-    private string $first_name = '';
-    private string $last_name = '';
-    private string $email = '';
-    private string $password = '';
-    private float $credit = 0.0;
+    protected ?int $id = null;
+    protected string $role = 'customer'; // ! v databaze enum
+    protected string $first_name;
+    protected string $last_name;
+    protected string $email;
+    protected string $password;
+    protected float $credit = 0.0;
 
-    public function __construct(string $email, string $password, string $first_name, string $last_name) {
+    public function __construct(
+        string $email = '',
+        string $password = '',
+        string $first_name = '',
+        string $last_name = ''
+    ) {
         $this->first_name = $first_name;
         $this->last_name = $last_name;
         $this->email = $email;
         $this->password = $password;
     }
 
-    /*
-     * TODO : Implement full constructor
-    public function __construct(int $id, string $first_name, string $last_name, string $email, string $password) {
-        $this->id = $id;
-        $this->first_name = $first_name;
-        $this->last_name = $last_name;
-        $this->email = $email;
-        $this->password = $password;
-    }
-    */
 
     // ID
     public function getId(): ?int

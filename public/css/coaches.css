@@ -97,18 +97,16 @@
 /* mobil */
 @media (max-width: 630px) {
     .hero-img {
-        visibility: hidden;
-        position: absolute;
+        background-image: url('/images/couches-hero-small.png');
     }
 
     .hero-text-container {
         position: relative;
-        margin-top: 2.8rem;
-        top:0;
-        left: 0;
-        height: auto;
-        width: 40rem;
-        background: #1c1c17;
-        border: none;
+        margin-top: 0;
+        margin-bottom: 0.5rem;
+        width: 100%;
+        box-sizing: border-box;
+        overflow: hidden;
+        padding-top: 1rem;
     }
 }
