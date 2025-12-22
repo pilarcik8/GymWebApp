@@ -46,6 +46,10 @@ class AuthController extends BaseController
      */
     public function login(Request $request): Response
     {
+        if ($this->user->isLoggedIn()) {
+            return $this->redirect($this->url("home.index"));
+        }
+
         $logged = null;
         $email = '';
 
@@ -53,7 +57,20 @@ class AuthController extends BaseController
             $email = trim($request->value('email'));
             $logged = $this->app->getAuthenticator()->login($email, $request->value('password'));
             if ($logged) {
-                return $this->redirect($this->url("admin.index"));
+                $role = $this->app->getAuthenticator()->getUser()->getRole();
+                if ($role === 'admin') {
+                    return $this->redirect($this->url("admin.index"));
+                }
+                //TODO: uprav redirecty
+                else if ($role === 'customer') {
+                    return $this->redirect($this->url("home.index"));
+                }
+                else if ($role === 'coach') {
+                    return $this->redirect($this->url("home.index"));
+                }
+                else if ($role === 'receptionist') {
+                    return $this->redirect($this->url("home.index"));
+                }
             }
         }
 
@@ -88,6 +105,10 @@ class AuthController extends BaseController
 
     public function register(Request $request): Response
     {
+        if ($this->user->isLoggedIn()) {
+            return $this->redirect($this->url("home.index"));
+        }
+
         $message = null;
 
         if ($request->hasValue('register')) {

@@ -77,6 +77,14 @@
                         </a>
 
                         <ul class="dropdown-menu">
+                            <?php if ($user->getRole() === "admin") { ?>
+                                <li>
+                                    <a class="dropdown-item" href="<?= $link->url("admin.index") ?>">
+                                        <i class="fa-solid fa-user-shield"></i> Admin Panel
+                                    </a>
+                                </li>
+                                <li><hr class="dropdown-divider"></li>
+                            <?php } ?>
 
                             <!-- TODO: Dalsie linky tu -->
 

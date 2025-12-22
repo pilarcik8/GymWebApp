@@ -48,7 +48,7 @@ class Configuration
     /**
      * Flag to determine whether to display all SQL queries after the application output for debugging purposes.
      */
-    public const SHOW_SQL_QUERY = true;
+    public const SHOW_SQL_QUERY = false;
 
     /**
      * Class name for the database naming conventions implementation. This should adhere to the IDbConvention interface.
