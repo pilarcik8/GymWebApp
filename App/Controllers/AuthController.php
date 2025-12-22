@@ -48,6 +48,7 @@ class AuthController extends BaseController
     {
         $logged = null;
         $email = '';
+
         if ($request->hasValue('submit')) {
             $email = trim($request->value('email'));
             $logged = $this->app->getAuthenticator()->login($email, $request->value('password'));
@@ -123,7 +124,7 @@ class AuthController extends BaseController
             $userModel->setLastName($last_name);
 
             $userModel->save();
-            return $this->redirect($this->url("auth.login")); // registrovany
+            return $this->redirect($this->url("auth.login")); // spravne registrovany
         }
         return $this->html(compact("message")); // zobrazit formular
     }
