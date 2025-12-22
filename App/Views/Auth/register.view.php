@@ -1,5 +1,8 @@
 <?php
 /** @var string|null $message */
+/** @var string|null $email */
+/** @var string|null $first_name */
+/** @var string|null $last_name */
 /** @var \Framework\Support\LinkGenerator $link */
 /** @var \Framework\Support\View $view */
 
@@ -15,19 +18,19 @@ $view->setLayout('root');
         <div class="card card-signin my-5">
             <h1>REGISTRÁCIA</h1>
             <div class="text-center text-danger mb-3">
-                <?= @$message ?>
+                <?= htmlspecialchars($message ?? '', ENT_QUOTES) ?>
             </div>
-            <form class="form-signin" method="post" action="<?= $link->url("register") ?>">
+            <form class="form-signin" method="post" action="<?= $link->url("auth.register") ?>">
                 <div class="form-label-group mb-3">
-                    <input name="first_name" type="text" id="first_name" class="form-control" placeholder="Meno" required autofocus>
+                    <input name="first_name" type="text" id="first_name" class="form-control" placeholder="Meno" required autofocus value="<?= $first_name ?? '' ?>">
                 </div>
 
                 <div class="form-label-group mb-3">
-                    <input name="last_name" type="text" id="last_name" class="form-control" placeholder="Priezvisko" required autofocus>
+                    <input name="last_name" type="text" id="last_name" class="form-control" placeholder="Priezvisko" required value="<?= $last_name ?? ''?>">
                 </div>
 
                 <div class="form-label-group mb-3">
-                    <input name="email" type="email" id="email" class="form-control" placeholder="Email" required autofocus>
+                    <input name="email" type="email" id="email" class="form-control" placeholder="Email" required value="<?= $email ?? '' ?>">
                 </div>
 
                 <div class="form-label-group mb-3">
@@ -42,4 +45,3 @@ $view->setLayout('root');
         </div>
     </div>
 </div>
-

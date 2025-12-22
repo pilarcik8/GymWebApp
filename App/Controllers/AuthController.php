@@ -47,15 +47,17 @@ class AuthController extends BaseController
     public function login(Request $request): Response
     {
         $logged = null;
+        $email = '';
         if ($request->hasValue('submit')) {
-            $logged = $this->app->getAuthenticator()->login($request->value('email'), $request->value('password'));
+            $email = trim($request->value('email'));
+            $logged = $this->app->getAuthenticator()->login($email, $request->value('password'));
             if ($logged) {
                 return $this->redirect($this->url("admin.index"));
             }
         }
 
         $message = $logged === false ? 'Bad email or password' : null;
-        return $this->html(compact("message"));
+        return $this->html(compact("message", "email"));
     }
 
     /**
@@ -86,6 +88,7 @@ class AuthController extends BaseController
     public function register(Request $request): Response
     {
         $message = null;
+
         if ($request->hasValue('register')) {
             $email = trim($request->value('email'));
             $first_name = trim($request->value('first_name'));
@@ -95,21 +98,21 @@ class AuthController extends BaseController
 
             if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
                 $message = "Invalid email format";
-                return $this->html(compact("message"));
+                return $this->html(compact("message", "first_name", "last_name"));
             }
             if (strlen($password) < 6) {
                 $message = "Password must have at least 6 characters";
-                return $this->html(compact("message"));
+                return $this->html(compact("message", "email", "first_name", "last_name"));
             }
             if ($password !== $password2) {
                 $message = "Passwords do not match";
-                return $this->html(compact("message"));
+                return $this->html(compact("message", "email", "first_name", "last_name"));
             }
 
             $existingUsers = Account::getCount('`email` = ?', [$email]);
             if ($existingUsers > 0) {
                 $message = "User with this email already exists";
-                return $this->html(compact("message"));
+                return $this->html(compact("message", "first_name", "last_name"));
             }
             $hash = password_hash($password, PASSWORD_DEFAULT);
 
@@ -120,8 +123,8 @@ class AuthController extends BaseController
             $userModel->setLastName($last_name);
 
             $userModel->save();
-            return $this->redirect($this->url("auth.login"));
+            return $this->redirect($this->url("auth.login")); // registrovany
         }
-        return $this->html(compact("message"));
+        return $this->html(compact("message")); // zobrazit formular
     }
 }

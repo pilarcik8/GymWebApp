@@ -2,6 +2,8 @@
 /** @var string|null $message */
 /** @var \Framework\Support\LinkGenerator $link */
 /** @var \Framework\Support\View $view */
+/** @var string|null $email */
+
 
 $view->setLayout('root');
 ?>
@@ -19,7 +21,7 @@ $view->setLayout('root');
             </div>
             <form class="form-signin" method="post" action="<?= $link->url("login") ?>">
                 <div class="form-label-group mb-3">
-                    <input name="email" type="email" id="email" class="form-control" placeholder="Email" required autofocus>
+                    <input name="email" type="email" id="email" class="form-control" placeholder="Email" required autofocus value="<?= $email ?? '' ?>">
                 </div>
 
                 <div class="form-label-group mb-3">
