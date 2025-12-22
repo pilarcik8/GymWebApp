@@ -8,7 +8,6 @@ use App\Models\Account;
 
 if (!isset($accounts) || !is_iterable($accounts)) {
     $accounts = Account::getAll();
-
 }
 
 /**
@@ -57,31 +56,56 @@ function acc_field($acc, string $field)
                         <th>Email</th>
                         <th>Name</th>
                         <th>Role</th>
+                        <th>Change role</th>
+                        <th>Delete</th>
                     </tr>
                     </thead>
                     <tbody>
                     <?php foreach ($accounts as $acc): ?>
+                        <?php
+                        $id = (int)(acc_field($acc, 'id') ?? 0);
+                        $email = (string)(acc_field($acc, 'email') ?? '');
+                        if (is_array($acc)) {
+                            $name = trim(($acc['first_name'] ?? '') . ' ' . ($acc['last_name'] ?? ''));
+                            if ($name === '') {
+                                $name = $email;
+                            }
+                        } else {
+                            $name = (string)(acc_field($acc, 'name') ?? $email);
+                        }
+                        $role = (string)(acc_field($acc, 'role') ?? '');
+                        ?>
                         <tr>
-                            <td><?= (int)(acc_field($acc, 'id') ?? 0) ?></td>
-                            <td><?= htmlspecialchars((string)(acc_field($acc, 'email') ?? '')) ?></td>
+                            <td><?= $id ?></td>
+                            <td><?= htmlspecialchars($email) ?></td>
+                            <td><?= htmlspecialchars($name) ?></td>
+                            <td><?= htmlspecialchars($role) ?></td>
+
+                            <!-- Change role: inline POST form with select -->
                             <td>
-                                <?php
-                                if (is_array($acc)) {
-                                    $name = trim(($acc['first_name'] ?? '') . ' ' . ($acc['last_name'] ?? ''));
-                                    if ($name === '') {
-                                        $name = (string)(acc_field($acc, 'email') ?? '');
-                                    }
-                                } else {
-                                    $name = (string)(acc_field($acc, 'name') ?? '');
-                                }
-                                ?>
-                                <?= htmlspecialchars($name) ?>
+                                <form method="post" action="<?= $link->url("changeRole") ?>" class="d-flex align-items-center">
+                                    <input type="hidden" name="id" value="<?= $id ?>">
+                                    <select name="role" class="form-control form-control-sm me-2" required>
+                                        <option value="customer" <?= $role === 'customer' ? 'selected' : '' ?>>customer</option>
+                                        <option value="admin" <?= $role === 'admin' ? 'selected' : '' ?>>admin</option>
+                                        <option value="reception" <?= $role === 'reception' ? 'selected' : '' ?>>reception</option>
+                                        <option value="trainer" <?= $role === 'trainer' ? 'selected' : '' ?>>trainer</option>
+                                    </select>
+                                    <button type="submit" name="changeRole" class="btn btn-sm btn-primary">Change</button>
+                                </form>
                             </td>
-                            <td><?= htmlspecialchars((string)(acc_field($acc, 'role') ?? '')) ?></td>
+
+                            <!-- Delete user: inline POST form with confirmation -->
+                            <td>
+                                <form method="post" action="<?= $link->url("deleteUser") ?>" onsubmit="return confirm('Are you sure you want to delete this user? This action cannot be undone.');">
+                                    <input type="hidden" name="id" value="<?= $id ?>">
+                                    <button type="submit" name="deleteUser" class="btn btn-sm btn-danger">Delete</button>
+                                </form>
+                            </td>
                         </tr>
                     <?php endforeach; ?>
                     <?php if (empty($accounts)): ?>
-                        <tr><td colspan="4">No accounts found.</td></tr>
+                        <tr><td colspan="6">No accounts found.</td></tr>
                     <?php endif; ?>
                     </tbody>
                 </table>
@@ -89,42 +113,8 @@ function acc_field($acc, string $field)
 
             <hr>
 
-            <h5>Change role</h5>
-            <div class="row">
-                <div class="col-md-6">
-                    <form method="post" action="<?= $link->url("changeRole") ?>">
-                        <div class="mb-2">
-                            <label for="id-change">User ID</label>
-                            <input id="id-change" name="id" type="number" class="form-control" required />
-                        </div>
-                        <div class="mb-2">
-                            <label for="role">Role</label>
-                            <select id="role" name="role" class="form-control" required>
-                                <option value="customer">customer</option>
-                                <option value="admin">admin</option>
-                                <option value="reception">reception</option>
-                                <option value="trainer">trainer</option>
-                            </select>
-                        </div>
-                        <button type="submit" name="changeRole" class="btn btn-primary">Change role</button>
-                    </form>
-                </div>
+            <!-- Previous standalone forms removed: actions are now per-row in the table -->
 
-                <div class="col-md-6">
-                    <h5>Delete account</h5>
-                    <form method="post" action="<?= $link->url("deleteUser") ?>" onsubmit="return confirm('Are you sure you want to delete this user? This action cannot be undone.');">
-                        <div class="mb-2">
-                            <label for="id-delete">User ID</label>
-                            <input id="id-delete" name="id" type="number" class="form-control" required />
-                        </div>
-                        <div class="mb-2">
-                            <div>
-                                <button type="submit" name="deleteUser" class="btn btn-danger">Delete user</button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
         </div>
     </div>
 </div>

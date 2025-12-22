@@ -7,40 +7,27 @@ use Framework\Core\BaseController;
 use Framework\Http\Request;
 use Framework\Http\Responses\Response;
 
-/**
- * Class AdminController
- *
- * This controller manages admin-related actions within the application.It extends the base controller functionality
- * provided by BaseController.
- *
- * @package App\Controllers
- */
 class AdminController extends BaseController
 {
-    /**
-     * Authorizes actions in this controller.
-     *
-     * This method checks if the user is logged in, allowing or denying access to specific actions based
-     * on the authentication state.
-     *
-     * @param string $action The name of the action to authorize.
-     * @return bool Returns true if the user is logged in; false otherwise.
-     */
     public function authorize(Request $request, string $action): bool
     {
         return $this->user->isLoggedIn();
     }
 
-    /**
-     * Displays the index page of the admin panel.
-     *
-     * This action requires authorization. It returns an HTML response for the admin dashboard or main page.
-     *
-     * @return Response Returns a response object containing the rendered HTML.
-     */
     public function index(Request $request): Response
     {
-        return $this->html();
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+
+        // read flash message (if any) and clear it
+        $message = $_SESSION['flash_message'] ?? null;
+        unset($_SESSION['flash_message']);
+
+        // load accounts for the admin view
+        $accounts = Account::getAll();
+
+        return $this->html(compact('message', 'accounts'));
     }
 
     /**
@@ -48,64 +35,73 @@ class AdminController extends BaseController
      */
     public function changeRole(Request $request): Response
     {
-        $message = null;
-        //if ($this->user->getRole() !== 'admin')
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+
         if ($request->hasValue('changeRole')) {
             $id = (int)$request->post('id');
             $role = trim($request->post('role'));
 
             $account = Account::getOne($id);
             if ($account) {
+                if ($account->getRole() === $role) {
+                    $_SESSION['flash_message'] = "Používateľ #$id už má rolu $role.";
+                    return $this->redirect($this->url("admin.index"));
+                }
+
                 if ($account->getRole() === "admin") {
                     $adminCount = Account::getCount('`role` = ?', ["admin"]);
                     if ($adminCount <= 1 && $role !== "admin") {
-                        $message = "Nie je možné zmeniť rolu posledného administrátora.";
+                        $_SESSION['flash_message'] = "Nie je možné zmeniť rolu posledného administrátora.";
                         return $this->redirect($this->url("admin.index"));
                     }
                 }
                 $account->setRole($role);
                 $account->save();
 
-                $message = "Role používateľa #$id bola zmenená na $role.";
+                $_SESSION['flash_message'] = "Role používateľa #$id bola zmenená na $role.";
             } else {
-                $message = "Používateľ s ID #$id nebol nájdený.";
+                $_SESSION['flash_message'] = "Používateľ s ID #$id nebol nájdený.";
             }
         }
-        return $this->redirect($this->url("admin.index"), compact("message"));
+
+        return $this->redirect($this->url("admin.index"));
     }
 
     public function deleteUser(Request $request): Response
     {
-        $message = null;
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
 
         if ($request->hasValue('deleteUser')) {
             $id = (int)$request->post('id');
 
             $account = Account::getOne($id);
             if (!$account) {
-                $message = "Používateľ s ID #$id nebol nájdený.";
-                return $this->redirect($this->url("admin.index"), compact("message"));
+                $_SESSION['flash_message'] = "Používateľ s ID #$id nebol nájdený.";
+                return $this->redirect($this->url("admin.index"));
             }
 
-            // Prevent deleting the currently logged-in user
             if (method_exists($this->user, 'getId') && (int)$this->user->getId() === $id) {
-                $message = "Nemôžete vymazať svoj vlastný účet.";
-                return $this->redirect($this->url("admin.index"), compact("message"));
+                $_SESSION['flash_message'] = "Nemôžete vymazať svoj vlastný účet.";
+                return $this->redirect($this->url("admin.index"));
             }
 
-            // Prevent deleting the last admin
-            $role = null;
             $role = $account->getRole();
-
             if ($role === 'admin') {
                 $adminCount = Account::getCount('`role` = ?', ["admin"]);
                 if ($adminCount <= 1) {
-                    $message = "Nie je možné vymazať posledného administrátora.";
-                    return $this->redirect($this->url("admin.index"), compact("message"));
+                    $_SESSION['flash_message'] = "Nie je možné vymazať posledného administrátora.";
+                    return $this->redirect($this->url("admin.index"));
                 }
             }
+
             $account->delete();
+            $_SESSION['flash_message'] = "Používateľ #$id bol vymazaný.";
         }
+
         return $this->redirect($this->url("admin.index"));
     }
 }
