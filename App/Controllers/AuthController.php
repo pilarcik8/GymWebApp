@@ -61,15 +61,14 @@ class AuthController extends BaseController
                 if ($role === 'admin') {
                     return $this->redirect($this->url("admin.index"));
                 }
-                //TODO: uprav redirecty
                 else if ($role === 'customer') {
-                    return $this->redirect($this->url("home.index"));
+                    return $this->redirect($this->url("customer.index"));
                 }
-                else if ($role === 'coach') {
-                    return $this->redirect($this->url("home.index"));
+                else if ($role === 'trainer') {
+                    return $this->redirect($this->url("coach.index"));
                 }
-                else if ($role === 'receptionist') {
-                    return $this->redirect($this->url("home.index"));
+                else if ($role === 'reception') {
+                    return $this->redirect($this->url("reception.index"));
                 }
             }
         }

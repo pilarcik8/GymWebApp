@@ -12,7 +12,7 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col">
-            <h4>Transactions</h4>
+            <h4>Your Group Trainings</h4>
             <div class="text-center text-danger mb-3">
                 <?= @$message ?>
             </div>

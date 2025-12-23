@@ -106,6 +106,22 @@
                                 </li>
                                 <li><hr class="dropdown-divider"></li>
                             <?php } ?>
+                            <?php if ($user->getRole() === "reception") { ?>
+                                <li>
+                                    <a class="dropdown-item" href="<?= $link->url("reception.index") ?>">
+                                        <i class="fa-solid fa-headset"></i> Reception Panel
+                                    </a>
+                                </li>
+                                <li><hr class="dropdown-divider"></li>
+                            <?php } ?>
+                            <?php if ($user->getRole() === "trainer") { ?>
+                                <li>
+                                    <a class="dropdown-item" href="<?= $link->url("trainer.index") ?>">
+                                        <i class="fa-solid fa-user-tie"></i> Trainer Panel
+                                    </a>
+                                </li>
+                                <li><hr class="dropdown-divider"></li>
+                            <?php } ?>
                             <!-- Additional links can be added here -->
 
                             <li>
