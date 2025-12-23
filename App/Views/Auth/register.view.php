@@ -11,6 +11,7 @@ $view->setLayout('root');
 
 <head>
     <link rel="stylesheet" href="<?= $link->asset('/css/login-register.css') ?>">
+    <script src="<?= $link->asset('js/register.js') ?>"></script>
 </head>
 
 <div class="login-hero">

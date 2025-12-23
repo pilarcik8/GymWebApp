@@ -11,7 +11,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title><?= htmlspecialchars(App\Configuration::APP_NAME ?: 'Bronze Gym') ?></title>
+    <title><?= App\Configuration::APP_NAME ?: 'Bronze Gym' ?></title>
 
     <!-- Boostrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -28,9 +28,8 @@
     <link rel="manifest" href="<?= $link->asset('favicons/site.webmanifest') ?>">
     <link rel="shortcut icon" href="<?= $link->asset('favicons/16x16.ico') ?>">
 
-    <!-- CSS, JS -->
+    <!-- CSS ROOT -->
     <link rel="stylesheet" href="<?= $link->asset('/css/root.css') ?>">
-    <script src="<?= $link->asset('js/script.js') ?>"></script>
 </head>
 <body>
 

@@ -18,6 +18,7 @@ function splitDateTime($datetimeString) {
 
 <head>
     <link rel="stylesheet" href="<?= $link->asset('/css/coach-panel.css') ?>">
+    <script src="<?= $link->asset('js/coach-panel.js') ?>"></script>
 </head>
 
 <div class="container-fluid">
@@ -46,9 +47,9 @@ function splitDateTime($datetimeString) {
                         $date = $arr[0];
                         $time = $arr[1];
                         $id = $gc->getId();
-                        //TODO: pocet rezervacii
                         $reservations = 0;
-                    ?>
+                        $desc = trim((string) $gc->getDescription());
+                        ?>
                         <tr>
                             <td><?= $id ?></td>
                             <td><?= $gc->getName() ?></td>
@@ -57,16 +58,29 @@ function splitDateTime($datetimeString) {
                             <td><?= $gc->getDurationMinutes() ?></td>
                             <td><?= $reservations ?>/<?= $gc->getCapacity() ?></td>
                             <td>
-                                <form method="post" action="<?= $link->url("deleteGroupClass") ?>" onsubmit="return confirm('Naozaj chcete odstrániť tohto skupinový tréning? Používateľov účet nebude možné navrátiť.');">
+                                <form id="buttons" method="post" action="<?= $link->url("deleteGroupClass") ?>" onsubmit="return confirm('Naozaj chcete odstrániť tohto skupinový tréning? Tréning nebude možné navrátiť.');">
                                     <input type="hidden" name="id" value="<?= $id ?>">
                                     <button type="submit" name="deleteGroupClass" class="btn btn-sm btn-danger">Odstrániť</button>
                                 </form>
+                                <button type="button" class="btn btn-sm btn-info toggle-desc" data-id="<?= $id ?>">
+                                    Popis
+                                </button>
+                            </td>
+                        </tr>
+
+                        <tr id="desc" class="desc-row" data-id="<?= $id ?>">
+                            <td colspan="8" class="bg-light">
+                                <?php if ($desc !== ''): ?>
+                                    <?= $desc ?>
+                                <?php else: ?>
+                                    <em class="text-muted">Žiadny popis.</em>
+                                <?php endif; ?>
                             </td>
                         </tr>
                     <?php endforeach;
                     if (empty($groupClasses)): ?>
                         <tr>
-                            <td colspan="6" class="text-center">Nemáte žiadne skupinové hodiny naplánované.</td>
+                            <td colspan="8" class="text-center">Nemáte žiadne skupinové hodiny naplánované.</td>
                         </tr>
                     <?php endif; ?>
                     </tbody>
@@ -76,7 +90,7 @@ function splitDateTime($datetimeString) {
         <hr>
         <div id="form-create-class">
             <div>
-                <h4>Vytvoriť skupinovú hodinu</h4>
+                <h4>Vytvoriť skupinový tréning</h4>
                 <form id="form" action="<?= $link->url('createGroupClass') ?>" method="post" class="row">
                     <div class="col-md-8">
                         <label for="gc-name" class="form-label">Pomenovanie</label>
