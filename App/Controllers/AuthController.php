@@ -117,31 +117,27 @@ class AuthController extends BaseController
             $password = $request->value('password');
             $password2 = $request->value('password2');
 
-            if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                $message = "Invalid email format";
-                return $this->html(compact("message", "first_name", "last_name"));
-            }
             if (strlen($password) < 6) {
-                $message = "Password must have at least 6 characters";
+                $message = "Heslo musí mať minimálne 6 znakov";
                 return $this->html(compact("message", "email", "first_name", "last_name"));
             }
             if ($password !== $password2) {
-                $message = "Passwords do not match";
+                $message = "Heslá sa nezhodujú";
                 return $this->html(compact("message", "email", "first_name", "last_name"));
             }
 
             $existingUsers = Account::getCount('`email` = ?', [$email]);
             if ($existingUsers > 0) {
-                $message = "User with this email already exists";
+                $message = "Daný email je už zaregistrovaný";
                 return $this->html(compact("message", "first_name", "last_name"));
             }
             $hash = password_hash($password, PASSWORD_DEFAULT);
 
-            $userModel = new Account();
-            $userModel->setEmail($email);
-            $userModel->setPassword($hash);
-            $userModel->setFirstName($first_name);
-            $userModel->setLastName($last_name);
+            $userModel = new Account($email, $hash, $first_name, $last_name);
+            //$userModel->setEmail($email);
+            //$userModel->setPassword($hash);
+            //$userModel->setFirstName($first_name);
+            //$userModel->setLastName($last_name);
 
             $userModel->save();
             return $this->redirect($this->url("auth.login")); // spravne registrovany

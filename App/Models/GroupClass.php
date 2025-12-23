@@ -10,15 +10,11 @@ class GroupClass extends Model {
     protected string $date = '';
     protected int $duration_minutes = 0;
     protected int $trainer_id = 0;
+    protected int $capacity = 0;
 
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function setId(?int $id): void
-    {
-        $this->id = $id;
     }
 
     public function getName(): string
@@ -59,5 +55,15 @@ class GroupClass extends Model {
     public function setTrainerId(int $trainer_id): void
     {
         $this->trainer_id = $trainer_id;
+    }
+
+    public function getCapacity(): int
+    {
+        return $this->capacity;
+    }
+
+    public function setCapacity(int $capacity): void
+    {
+        $this->capacity = $capacity;
     }
 }

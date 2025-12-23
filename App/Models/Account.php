@@ -34,11 +34,6 @@ class Account extends Model implements IIdentity
         return $this->id;
     }
 
-    public function setId(?int $id): void
-    {
-        $this->id = $id;
-    }
-
     // Role
     public function getRole(): string
     {

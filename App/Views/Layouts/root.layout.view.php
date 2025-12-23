@@ -76,7 +76,7 @@
                             <div class="d-flex flex-column align-items-start" style="line-height:1;">
                                 <span><?= $user->getName() ?></span>
                                 <?php if ($user->getRole() === 'customer'): ?>
-                                    <small class="text-muted">Credit: <?= number_format((float)$user->getCredit(), 2, ',', '') ?> €</small>
+                                    <small class="text-muted">Kredit: <?= number_format((float)$user->getCredit(), 2, ',', '') ?> €</small>
                                 <?php endif; ?>
                             </div>
                         </a>
@@ -85,15 +85,13 @@
                             <?php if ($user->getRole() === "admin") { ?>
                                 <li>
                                     <a class="dropdown-item" href="<?= $link->url("admin.index") ?>">
-                                        <i class="fa-solid fa-user-shield"></i>
-                                        Admin Panel
+                                        <i class="fa-solid fa-user-shield"></i> Admin Panel
                                     </a>
                                 </li>
                                 <li><hr class="dropdown-divider"></li>
                                 <li>
                                     <a class="dropdown-item" href="<?= $link->url("admin.gallery") ?>">
-                                        <i class="fa-solid fa-images me-1"></i>
-                                        Gallery
+                                        <i class="fa-solid fa-images me-1"></i> Uprav Galériu
                                     </a>
                                 </li>
                                 <li><hr class="dropdown-divider"></li>
@@ -101,7 +99,7 @@
                             <?php if ($user->getRole() === "customer") { ?>
                                 <li>
                                     <a class="dropdown-item" href="<?= $link->url("customer.index") ?>">
-                                        <i class="fa-solid fa-id-card"></i> Customer Panel
+                                        <i class="fa-solid fa-id-card"></i> Môj účet
                                     </a>
                                 </li>
                                 <li><hr class="dropdown-divider"></li>
@@ -109,20 +107,19 @@
                             <?php if ($user->getRole() === "reception") { ?>
                                 <li>
                                     <a class="dropdown-item" href="<?= $link->url("reception.index") ?>">
-                                        <i class="fa-solid fa-headset"></i> Reception Panel
+                                        <i class="fa-solid fa-headset"></i> Recepcia Panel
                                     </a>
                                 </li>
                                 <li><hr class="dropdown-divider"></li>
                             <?php } ?>
                             <?php if ($user->getRole() === "trainer") { ?>
                                 <li>
-                                    <a class="dropdown-item" href="<?= $link->url("trainer.index") ?>">
-                                        <i class="fa-solid fa-user-tie"></i> Trainer Panel
+                                    <a class="dropdown-item" href="<?= $link->url("coach.index") ?>">
+                                        <i class="fa-solid fa-user-tie"></i> Tréner Panel
                                     </a>
                                 </li>
                                 <li><hr class="dropdown-divider"></li>
                             <?php } ?>
-                            <!-- Additional links can be added here -->
 
                             <li>
                                 <a class="dropdown-item text-danger" href="<?= $link->url("auth.logout") ?>">

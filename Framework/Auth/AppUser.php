@@ -73,6 +73,14 @@ class AppUser
         return null;
     }
 
+    public function getID() : ?int
+    {
+        if ($this->identity instanceof Account) {
+            return $this->identity->getID();
+        }
+        return null;
+    }
+
     /**
      * Magic method to forward calls to the identity object if it exists.
      *

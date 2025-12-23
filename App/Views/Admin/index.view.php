@@ -4,37 +4,7 @@
 /** @var \Framework\Support\LinkGenerator $link */
 /** @var string|null $message */
 
-use App\Models\Account;
-
-if (!isset($accounts) || !is_iterable($accounts)) {
-    $accounts = Account::getAll();
-}
-
-/**
- * Helper to read account fields from either array row or Account object.
- */
-function acc_field($acc, string $field)
-{
-    if (is_array($acc)) {
-        return $acc[$field] ?? null;
-    }
-    if (is_object($acc)) {
-        switch ($field) {
-            case 'id':
-                return method_exists($acc, 'getId') ? $acc->getId() : null;
-            case 'email':
-                return method_exists($acc, 'getEmail') ? $acc->getEmail() : null;
-            case 'role':
-                return method_exists($acc, 'getRole') ? $acc->getRole() : null;
-            case 'name':
-                // prefer provided getName(), fall back to email
-                return method_exists($acc, 'getName') ? $acc->getName() : (method_exists($acc, 'getEmail') ? $acc->getEmail() : null);
-            default:
-                return null;
-        }
-    }
-    return null;
-}
+$accounts = App\Models\Account::getAll();
 ?>
 
 <head>
@@ -44,7 +14,7 @@ function acc_field($acc, string $field)
 <div class="container-fluid">
     <div class="row">
         <div class="col">
-            <h4>Accounts</h4>
+            <h4>Účty</h4>
             <div class="text-center text-danger mb-3">
                 <?= @$message ?>
             </div>
@@ -54,34 +24,24 @@ function acc_field($acc, string $field)
                     <tr>
                         <th>ID</th>
                         <th>Email</th>
-                        <th>Name</th>
-                        <th>Role</th>
-                        <th>Change role</th>
-                        <th>Delete</th>
+                        <th>Meno</th>
+                        <th>Roľa</th>
+                        <th></th>
+                        <th></th>
                     </tr>
                     </thead>
                     <tbody>
                     <?php foreach ($accounts as $acc): ?>
                         <?php
-                        $id = (int)(acc_field($acc, 'id') ?? 0);
-                        $email = (string)(acc_field($acc, 'email') ?? '');
-                        if (is_array($acc)) {
-                            $name = trim(($acc['first_name'] ?? '') . ' ' . ($acc['last_name'] ?? ''));
-                            if ($name === '') {
-                                $name = $email;
-                            }
-                        } else {
-                            $name = (string)(acc_field($acc, 'name') ?? $email);
-                        }
-                        $role = (string)(acc_field($acc, 'role') ?? '');
+                        $id = $acc->getId();
+                        $role = $acc->getRole();
                         ?>
                         <tr>
                             <td><?= $id ?></td>
-                            <td><?= htmlspecialchars($email) ?></td>
-                            <td><?= htmlspecialchars($name) ?></td>
-                            <td><?= htmlspecialchars($role) ?></td>
+                            <td><?= $acc->getEmail() ?></td>
+                            <td><?= $acc->getName() ?></td>
+                            <td><?= $role ?></td>
 
-                            <!-- Change role: inline POST form with select -->
                             <td>
                                 <form method="post" action="<?= $link->url("changeRole") ?>" class="d-flex align-items-center">
                                     <input type="hidden" name="id" value="<?= $id ?>">
@@ -95,9 +55,8 @@ function acc_field($acc, string $field)
                                 </form>
                             </td>
 
-                            <!-- Delete user: inline POST form with confirmation -->
                             <td>
-                                <form method="post" action="<?= $link->url("deleteUser") ?>" onsubmit="return confirm('Are you sure you want to delete this user? This action cannot be undone.');">
+                                <form method="post" action="<?= $link->url("deleteUser") ?>" onsubmit="return confirm('Naozaj chcete odstrániť tohto používatela? Používateľov účet nebude možné navrátiť.');">
                                     <input type="hidden" name="id" value="<?= $id ?>">
                                     <button type="submit" name="deleteUser" class="btn btn-sm btn-danger">Delete</button>
                                 </form>
@@ -105,7 +64,7 @@ function acc_field($acc, string $field)
                         </tr>
                     <?php endforeach; ?>
                     <?php if (empty($accounts)): ?>
-                        <tr><td colspan="6">No accounts found.</td></tr>
+                        <tr><td colspan="6">Žiadne účty neboli nájdené.</td></tr>
                     <?php endif; ?>
                     </tbody>
                 </table>
