@@ -1,3 +1,7 @@
+body {
+    background-color: #1a1a1a;
+}
+
 /* HERO */
 .home-hero-div {
     position: relative;
@@ -7,14 +11,6 @@
     width: 100%;
     height: auto;
     display: block;
-}
-
-/* Skryť obrázok na mobiloch */
-@media (max-width: 630px) {
-    .hero-img {
-        height: 14rem;
-        visibility: hidden;
-    }
 }
 
 .home-hero-text {

@@ -1,0 +1,39 @@
+.login-hero {
+    /* Pozadie */
+    background-image: url('/images/log-reg-background.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center center;
+
+    /* Text a Form */
+    display: flex;
+    padding: 2rem 10%; /* vertical + horizontal spacing */
+}
+
+/* Nadpis */
+h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    color: white;
+}
+
+/* Log in tlačidlo */
+.button-green {
+    background: #0ea30e;
+    font-size: 0.7rem;
+    font-weight: bold;
+    width: 50%;
+}
+
+.button-green:hover {
+    background: #0c8d0c;
+}
+
+@media (max-width: 992px) {
+    .login-hero {
+        justify-content: center;
+        padding-left: 2rem;
+        padding-right: 2rem;
+    }
+}
+

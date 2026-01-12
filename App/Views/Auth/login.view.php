@@ -9,12 +9,12 @@ $view->setLayout('root');
 ?>
 
 <head>
-    <link rel="stylesheet" href="<?= $link->asset('/css/login-register.css') ?>">
+    <link rel="stylesheet" href="<?= $link->asset('/css/login.css') ?>">
 </head>
 
 <div class="login-hero">
     <div class="row">
-        <div class="card card-signin my-5">
+        <div>
             <h1>PRIHLÁSENIE</h1>
             <div class="text-center text-danger mb-3">
                 <?= @$message ?>

@@ -1,3 +1,7 @@
+body {
+    background-color: #1a1a1a;
+}
+
 /* HERO */
 .hero-coaches-wrapper {
     position: relative;
@@ -96,17 +100,7 @@
 
 /* mobil */
 @media (max-width: 630px) {
-    .hero-img {
-        background-image: url('/images/couches-hero-small.png');
-    }
-
-    .hero-text-container {
-        position: relative;
+     .hero-text-container {
         margin-top: 0;
-        margin-bottom: 0.5rem;
-        width: 100%;
-        box-sizing: border-box;
-        overflow: hidden;
-        padding-top: 1rem;
     }
 }

@@ -73,7 +73,7 @@ class AuthController extends BaseController
             }
         }
 
-        $message = $logged === false ? 'Bad email or password' : null;
+        $message = $logged === false ? 'Nesprávny email alebo heslo' : null;
         return $this->html(compact("message", "email"));
     }
 

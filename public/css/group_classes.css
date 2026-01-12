@@ -1,0 +1,7 @@
+.bg-img {
+    /* Pozadie */
+    background-image: url('/images/group-class-background.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    min-height: 100vh;
+}
