@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use App\Models\Pass;
 use App\Models\Account;
+use App\Models\Group_Class_Participant;
 use App\Configuration;
 use Framework\Core\BaseController;
 use Framework\Http\Request;
@@ -130,4 +131,58 @@ class HomeController extends BaseController
 
         return $this->redirect($this->url('home.permits'));
     }
+
+    public function joinGroupClass(Request $request): Response
+    {
+        if (!$this->user->isLoggedIn()) {
+            return $this->redirect($this->url('auth.login'));
+        }
+
+        if ($this->user->getRole() !== 'customer') {
+            return $this->redirect($this->url('home.permits'));
+        }
+
+        $groupId = null;
+        if ($request->isPost()) {
+            $groupId = $request->post('group_class_id');
+        }
+
+        if ($groupId === null || $groupId <= 0) {
+            return $this->redirect($this->url('home.group_classes'));
+        }
+
+        $existing = Group_Class_Participant::getAll('`customer_id` = ? AND `group_class_id` = ?', [$this->user->getID(), $groupId]);
+        if (count($existing) > 0) {
+            return $this->redirect($this->url('home.group_classes'));
+        }
+
+        $participant = new Group_Class_Participant();
+        $participant->setCustomerId($this->user->getID());
+        $participant->setGroupClassId($groupId);
+        $participant->save();
+
+        return $this->redirect($this->url('home.group_classes'));
+    }
+
+    public function leaveGroupClass(Request $request): Response
+    {
+        if (!$this->user->isLoggedIn()) {
+            return $this->redirect($this->url('auth.login'));
+        }
+
+        $groupId = $request->post('group_class_id');
+        $groupId = $groupId !== null ? (int)$groupId : null;
+        if ($groupId === null || $groupId <= 0) {
+            return $this->redirect($this->url('home.group_classes'));
+        }
+
+        Group_Class_Participant::executeRawSQL(
+            'DELETE FROM `group_class_participants` WHERE `customer_id` = ? AND `group_class_id` = ?',
+            [$this->user->getID(), $groupId]
+        );
+
+
+        return $this->redirect($this->url('home.group_classes'));
+    }
 }
+

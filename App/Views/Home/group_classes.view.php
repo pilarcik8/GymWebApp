@@ -5,6 +5,7 @@
 
 use App\Models\Group_Class;
 use App\Models\Account;
+use App\Models\Group_Class_Participant;
 
 $view->setLayout('root');
 
@@ -20,7 +21,8 @@ function splitDateTime($datetimeString) {
 ?>
 
 <head>
-    <link rel="stylesheet" href="<?= $link->asset('/css/group_classes.css') ?>">
+    <link rel="stylesheet" href="<?= $link->asset('/css/group-classes.css') ?>">
+    <script src="<?= $link->asset('/js/group-classes.js') ?>"></script>
 </head>
 
 <div class="bg-img">
@@ -36,7 +38,7 @@ function splitDateTime($datetimeString) {
                     <th>Tréner</th>
                     <th>Dátum</th>
                     <th>Čas</th>
-                    <th>Dĺžka (min)</th>
+                    <th>Dĺžka (minúty)</th>
                     <th>Kapacita</th>
                     <th></th>
                 </tr>
@@ -52,17 +54,27 @@ function splitDateTime($datetimeString) {
                         $date = $arr[0];
                         $time = $arr[1];
                         $id = (int)$gc->getId();
-                        $reservations = 0; // implement reservation count if available
+                        // count reservations for this class
+                        $reservations = Group_Class_Participant::getCount('`group_class_id` = ?', [$id]);
+                        $capacity = (int)$gc->getCapacity();
                         $desc = trim((string)$gc->getDescription());
                         $trainer = Account::getOne($gc->getTrainerId());
                         $trainerName = $trainer ? trim($trainer->getFirstName() . ' ' . $trainer->getLastName()) : '—';
+
+                        $isRegistered = false;
+                        if (isset($user) && $user->isLoggedIn()) {
+                            $currentUserId = $user->getID();
+                            if ($currentUserId !== null) {
+                                $isRegistered = Group_Class_Participant::getCount('`group_class_id` = ? AND `customer_id` = ?', [$id, $currentUserId]) > 0;
+                            }
+                        }
                         ?>
                         <tr>
                             <td><?= $gc->getName() ?></td>
                             <td>
                                 <?php if ($desc !== ''):?>
                                     <button type="button" class="btn btn-sm btn-outline-primary show-desc"
-                                            data-desc="<?= $desc ?>" data-title="<?= htmlspecialchars($gc->getName()) ?>">
+                                            data-desc="<?= $desc ?>" data-title="<?= $gc->getName() ?>">
                                         Popis
                                     </button>
                                 <?php else: ?>
@@ -74,9 +86,27 @@ function splitDateTime($datetimeString) {
                             <td><?= $date ?></td>
                             <td><?= $time ?></td>
                             <td><?= $gc->getDurationMinutes() ?></td>
-                            <td><?= $reservations ?>/<?= $gc->getCapacity() ?></td>
+                            <td><?= $reservations ?>/<?= $capacity ?></td>
                             <td>
-                                <button type="button" class="btn btn-sm btn-success">Prihlásiť</button>
+                                <?php if ($user->getRole() !== 'customer') : ?>
+                                    <span class="badge bg-danger">Nie si zákazník</span>
+                                <?php elseif ($isRegistered): ?>
+                                    <form method="post" action="<?= $link->url('home.leaveGroupClass') ?>" class="d-inline">
+                                            <input type="hidden" name="group_class_id" value="<?= $id ?>">
+                                            <button type="submit" class="btn btn-sm btn-danger">Odhlásiť</button>
+                                        </form>
+                                <?php elseif ($reservations >= $capacity): ?>
+                                    <span class="badge bg-danger">Plné</span>
+                                <?php else: ?>
+                                    <?php if (isset($user) && $user->isLoggedIn()): ?>
+                                        <form method="post" action="<?= $link->url('home.joinGroupClass') ?>" class="d-inline">
+                                            <input type="hidden" name="group_class_id" value="<?= $id ?>">
+                                            <button type="submit" class="btn btn-sm btn-success">Prihlásiť</button>
+                                        </form>
+                                    <?php else: ?>
+                                        <a href="<?= $link->url('auth.login') ?>" class="btn btn-sm btn-success">Prihlásiť</a>
+                                    <?php endif; ?>
+                                <?php endif; ?>
                             </td>
                         </tr>
                     <?php endforeach; ?>
@@ -99,38 +129,3 @@ function splitDateTime($datetimeString) {
     </div>
 </div>
 
-<script>
-    (function () {
-        function showModal(title, htmlContent) {
-            var modal = document.getElementById('desc-modal');
-            document.getElementById('desc-modal-title').textContent = title;
-            document.getElementById('desc-modal-body').innerHTML = htmlContent;
-            modal.classList.remove('d-none');
-            modal.setAttribute('aria-hidden', 'false');
-        }
-        function hideModal() {
-            var modal = document.getElementById('desc-modal');
-            modal.classList.add('d-none');
-            modal.setAttribute('aria-hidden', 'true');
-            document.getElementById('desc-modal-body').innerHTML = '';
-            document.getElementById('desc-modal-title').textContent = '';
-        }
-
-        Array.from(document.getElementsByClassName('show-desc')).forEach(function (btn) {
-            btn.addEventListener('click', function () {
-                var desc = btn.getAttribute('data-desc') || '';
-                var title = btn.getAttribute('data-title') || '';
-
-                showModal(title, desc);
-            });
-        });
-
-        document.getElementById('desc-modal-close').addEventListener('click', hideModal);
-        document.querySelector('.desc-modal-backdrop').addEventListener('click', hideModal);
-
-        // close on escape
-        document.addEventListener('keydown', function (ev) {
-            if (ev.key === 'Escape') hideModal();
-        });
-    })();
-</script>

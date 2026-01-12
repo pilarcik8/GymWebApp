@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Framework\Core\Model;
 
-class GroupClassParticipant extends Model
+class Group_Class_Participant extends Model
 {
     protected ?int $id = null;
     protected ?int $customer_id = null;
