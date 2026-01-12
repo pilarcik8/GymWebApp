@@ -44,7 +44,7 @@ $permits = [
 
 <div class="permits-hero">
     <h1>Cenník</h1>
-    <h2>Pernamentka</h2>
+    <h2>Pernamentky</h2>
 
     <div class="container">
 

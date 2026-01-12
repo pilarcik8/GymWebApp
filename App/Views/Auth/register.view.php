@@ -14,7 +14,7 @@ $view->setLayout('root');
     <script src="<?= $link->asset('js/register.js') ?>"></script>
 </head>
 
-<div class="login-hero">
+<div class="register-hero">
     <div>
         <h1>REGISTRÁCIA</h1>
         <div class="text-center text-danger mb-3">

@@ -13,7 +13,7 @@ $view->setLayout('root');
 </head>
 
 <div class="login-hero">
-    <div class="row">
+    <div>
         <div>
             <h1>PRIHLÁSENIE</h1>
             <div class="text-center text-danger mb-3">

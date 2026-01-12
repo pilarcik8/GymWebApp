@@ -1,6 +1,6 @@
-.login-hero {
-    /* Pozadie */
-    background-image: url('/images/log-reg-background.jpg');
+.register-hero {
+    /* Pozadie: pridáme tmavý overlay nad obrázok pre lepšiu čitateľnosť */
+    background-image: linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.45)), url('/images/log-reg-background.jpg');
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center center;
@@ -8,6 +8,7 @@
     /* Text a Form */
     display: flex;
     padding: 2rem 10%; /* vertical + horizontal spacing */
+
 }
 
 /* Nadpis */
@@ -30,7 +31,7 @@ h1 {
 }
 
 @media (max-width: 992px) {
-    .login-hero {
+    .register-hero {
         justify-content: center;
         padding-left: 2rem;
         padding-right: 2rem;

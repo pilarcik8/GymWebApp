@@ -1,7 +1,79 @@
 .bg-img {
-    /* Pozadie */
     background-image: url('/images/group-class-background.jpg');
     background-repeat: no-repeat;
     background-size: cover;
     min-height: 100vh;
+    padding: 4rem 0;
+}
+
+h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #9f9809;
+    padding-bottom: 1rem;
+}
+
+.group-card {
+    background: #000000d9;
+    border-radius: 1.5rem;
+    padding: 1.25rem;
+    box-shadow: 0 6px 24px rgba(0,0,0,0.18);
+}
+
+.table {
+    border: 0.2rem solid #9f9809;
+}
+
+th {
+    background-color: #9f9809 !important;
+    border-color: black;
+    color: black !important;
+}
+
+td, th {
+    vertical-align: middle;
+}
+
+#div-table {
+    max-height: 60vh;
+}
+
+/* Modal */
+.desc-modal {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: black;
+}
+
+.desc-modal-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+}
+.desc-modal-dialog {
+    position: relative;
+    background: #fff;
+    max-width: 680px;
+    border-radius: 8px;
+    max-height: 80vh;
+    overflow:auto;
+}
+.desc-modal-header {
+    display:flex;
+    justify-content:space-between;
+    padding:0.75rem 1rem;
+    border-bottom:1px solid #e9ecef;
+}
+
+.desc-modal-body {
+    padding:1rem;
+}
+
+@media (max-width: 768px) {
+    .bg-img {
+        padding: 2rem 0;
+    }
 }
