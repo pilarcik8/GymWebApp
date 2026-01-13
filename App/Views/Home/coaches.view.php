@@ -3,6 +3,29 @@
 /** @var \Framework\Support\View $view */
 
 $view->setLayout('root');
+
+// TODO: Vymenit data trenerov za data z databazy
+// TODO: Uprav model a databazu
+$coaches = [
+        [
+                'name' => 'MAREK',
+                'short' => 'SILOVÝ TRÉNING A KONDÍCIA',
+                'desc' => 'Marek je certifikovaný tréner so zameraním na silový a funkčný tréning. Pomôže vám vybudovať svaly, zlepšiť výkon a naučí vás správnu techniku cvičenia.',
+                'img'  => '/images/coach-1.png',
+        ],
+        [
+                'name' => 'LUCIA',
+                'short' => 'FITNESS A ZDRAVÝ ŽIVOTNÝ ŠTÝL',
+                'desc' => 'Lucia je energická trénerka, ktorá kombinuje silový tréning s prvkami mobility a jógy. Pomôže vám cítiť sa lepšie, silnejšie a sebavedomejšie každý deň.',
+                'img'  => '/images/coach-2.png',
+        ],
+        [
+                'name' => 'MARTIN',
+                'short' => 'SILOVÝ TRÉNING A KONDÍCIA',
+                'desc' => 'Martin sa zameriava na rozvoj sily, správnu techniku a dlhodobú kondíciu. Jeho tréningy sú dynamické, premyslené a prispôsobené úrovni každého klienta.',
+                'img'  => '/images/coach-3.png',
+        ],
+];
 ?>
 
 <head>
@@ -19,45 +42,19 @@ $view->setLayout('root');
     </div>
 </div>
 
-<!-- Treneri -->
+<!-- Treneri rendered by loop -->
+<?php foreach ($coaches as $coach): ?>
     <div class="container">
         <div class="slashed-rectangle">
             <div class="slashed-rectangle-content">
                 <div>
-                    <h5 class="coach-name">MAREK</h5>
-                    <p class="coach-short-info">SILOVÝ TRÉNING A KONDÍCIA</p>
-                    Marek je certifikovaný tréner so zameraním na silový a funkčný tréning. Pomôže vám vybudovať svaly, zlepšiť výkon a naučí vás správnu techniku cvičenia.
+                    <h5 class="coach-name"><?= $coach['name'] ?></h5>
+                    <p class="coach-short-info"><?= $coach['short'] ?></p>
+                    <?= $coach['desc'] ?>
                 </div>
             </div>
             <button class="btn btn-primary">Rezervuj</button>
         </div>
-        <img class="coach-foto-left" src="<?= $link->asset('/images/coach-1.png') ?>" alt="trener1">
+        <img class="coach-foto-left" src="<?= $link->asset($coach['img']) ?>" alt="trener">
     </div>
-
-    <div class="container">
-    <div class="slashed-rectangle">
-        <div class="slashed-rectangle-content">
-            <div>
-                <h5 class="coach-name">LUCIA</h5>
-                <p class="coach-short-info">FITENESS A ZDRAVÝ ŽIVOTNÝ ŠTÝL</p>
-                Lucia je energická trénerka, ktorá kombinuje silový tréning s prvkami mobility a jógy. Pomôže vám cítiť sa lepšie, silnejšie a sebavedomejšie každý deň.
-            </div>
-        </div>
-        <button class="btn btn-primary">Rezervuj</button>
-    </div>
-        <img class="coach-foto-left" src="<?= $link->asset('/images/coach-2.png') ?>" alt="trener2">
-    </div>
-
-    <div class="container">
-    <div class="slashed-rectangle">
-        <div class="slashed-rectangle-content">
-            <div>
-                <h5 class="coach-name">MARTIN</h5>
-                <p class="coach-short-info">SILOVÝ TRÉNING A KONDÍCIA</p>
-                Martin sa zameriava na rozvoj sily, správnu techniku a dlhodobú kondíciu. Jeho tréningy sú dynamické, premyslené a prispôsobené úrovni každého klienta.
-            </div>
-        </div>
-        <button class="btn btn-primary">Rezervuj</button>
-    </div>
-        <img class="coach-foto-left" src="<?= $link->asset('/images/coach-3.png') ?>" alt="trener3">
-    </div>
+<?php endforeach; ?>

@@ -100,7 +100,7 @@ class HomeController extends BaseController
         $activePasses = Pass::getCount('`user_id` = ? AND `expiration_date` > ?', [$userId, $now->format('Y-m-d H:i:s')]);
 
         if ($activePasses > 0) {
-            $_SESSION['flash_message'] = 'Máte už aktívnu permanentku.';
+            $_SESSION['flash_message'] = 'Máte aktívnu permanentku.';
             return $this->redirect($this->url('home.permits'));
         }
 

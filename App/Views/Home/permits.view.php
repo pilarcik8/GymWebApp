@@ -35,7 +35,7 @@ $permits = [
             <div class="modal-body">
                 <p><?= $message ?></p>
                 <div class="text-center modal-close">
-                    <button id="modal-close" class="btn btn-primary">OK</button>
+                    <button id="modal-close" class="btn btn-warning">OK</button>
                 </div>
             </div>
         </div>

@@ -1,0 +1,62 @@
+h4 {
+    margin-top: 1.5rem;
+    margin-bottom: 1rem;
+    color: white;
+    font-weight: 800;
+    font-size: 2rem;
+}
+
+.flex-tables {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    align-items: flex-start;
+}
+
+.table-card {
+    margin-bottom: 1rem;
+    flex: 1 1 8rem;
+    min-width: 350px;
+    background: #ffffff;
+    padding: 0.75rem;
+    border-radius: 0.3rem;
+}
+
+.table-card .table-responsive {
+    max-height: 50vh;
+    overflow: auto;
+}
+
+h5 {
+    color: grey;
+    font-weight: 750;
+    font-style: italic;
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+}
+
+.table-toggle {
+    min-width: 38px;
+}
+.table-card.collapsed table tbody {
+    display: none;
+}
+
+@media (max-width: 480px) {
+    .table-card {
+        min-width: 100%;
+        flex-basis: 100%;
+    }
+
+}
+
+#background {
+    background-image: linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.45)), url('/images/log-reg-background.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center center;
+    min-height: 80vh;
+}
