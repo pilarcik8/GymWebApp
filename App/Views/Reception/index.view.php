@@ -3,10 +3,9 @@
 /** @var \Framework\Auth\AppUser $user */
 /** @var \Framework\Support\LinkGenerator $link */
 /** @var string|null $message */
+/** @var \Framework\Support\View $view */
 
-use App\Models\Account;
-
-$accounts = Account::getAll('`role` = ?', ['customer']);
+$view->setLayout('root');
 ?>
 
 <head>
@@ -25,7 +24,6 @@ $accounts = Account::getAll('`role` = ?', ['customer']);
                 <table class="table table-sm table-striped mb-0">
                     <thead>
                     <tr>
-                        <th>ID</th>
                         <th>Email</th>
                         <th>Meno</th>
                         <th>Kredit</th>
@@ -35,12 +33,11 @@ $accounts = Account::getAll('`role` = ?', ['customer']);
                     <tbody>
                     <?php foreach ($accounts as $acc): ?>
                         <?php
-                        $id = $acc->getId();
                         $role = $acc->getRole();
                         $name = $acc->getName();
+                        $id = $acc->getId();
                         ?>
                         <tr>
-                            <td><?= $id ?></td>
                             <td><?= $acc->getEmail() ?></td>
                             <td><?= $name ?></td>
                             <td><?= $acc->getCredit() ?></td>

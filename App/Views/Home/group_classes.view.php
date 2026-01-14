@@ -2,22 +2,9 @@
 /** @var \Framework\Support\LinkGenerator $link */
 /** @var \Framework\Support\View $view */
 /** @var \Framework\Auth\AppUser $user */
-
-use App\Models\Group_Class;
-use App\Models\Account;
-use App\Models\Group_Class_Participant;
+/** @var array|\Traversable $groupClasses */
 
 $view->setLayout('root');
-
-$now = (new DateTimeImmutable())->format('Y-m-d H:i:s');
-$groupClasses = Group_Class::getAll('`start_datetime` > ?', [$now], 'start_datetime ASC');
-
-function splitDateTime($datetimeString) {
-    $dt = new DateTimeImmutable($datetimeString);
-    $date = $dt->format('d.m.Y');
-    $time = $dt->format('H:i');
-    return [$date, $time];
-}
 ?>
 
 <head>
@@ -49,34 +36,22 @@ function splitDateTime($datetimeString) {
                         <td colspan="8" class="text-center">Nemáte žiadne skupinové hodiny naplánované.</td>
                     </tr>
                 <?php else: ?>
-                    <?php foreach ($groupClasses as $gc):
-                        $arr = splitDateTime($gc->getStartDatetime());
-                        $date = $arr[0];
-                        $time = $arr[1];
-                        $id = (int)$gc->getId();
-                        // count reservations for this class
-                        $reservations = Group_Class_Participant::getCount('`group_class_id` = ?', [$id]);
-                        $capacity = (int)$gc->getCapacity();
+                    <?php foreach ($groupClasses as $item):
+                        $gc = $item['model'];
+                        $date = $item['date'];
+                        $time = $item['time'];
+                        $id = $gc->getId();
+                        $reservations = $item['reservations'];
+                        $capacity = $gc->getCapacity();
                         $desc = trim((string)$gc->getDescription());
-                        $trainer = Account::getOne($gc->getTrainerId());
-                        $trainerName = $trainer ? trim($trainer->getFirstName() . ' ' . $trainer->getLastName()) : '—';
-
-                        $isRegistered = false;
-                        if (isset($user) && $user->isLoggedIn()) {
-                            $currentUserId = $user->getID();
-                            if ($currentUserId !== null) {
-                                $isRegistered = Group_Class_Participant::getCount('`group_class_id` = ? AND `customer_id` = ?', [$id, $currentUserId]) > 0;
-                            }
-                        }
+                        $trainerName = $item['trainerName'];
+                        $isRegistered = $item['is_registered'];
                         ?>
                         <tr>
                             <td><?= $gc->getName() ?></td>
                             <td>
                                 <?php if ($desc !== ''):?>
-                                    <button type="button" class="btn btn-sm btn-outline-primary show-desc"
-                                            data-desc="<?= $desc ?>" data-title="<?= $gc->getName() ?>">
-                                        Popis
-                                    </button>
+                                    <button type="button" class="btn btn-sm btn-outline-primary show-desc" data-desc="<?= $desc ?>" data-title="<?= $gc->getName() ?>">Popis</button>
                                 <?php else: ?>
                                     <em class="text-muted">Žiadny popis.</em>
                                 <?php endif; ?>
@@ -92,13 +67,13 @@ function splitDateTime($datetimeString) {
                                     <span class="badge bg-danger">Nie si zákazník</span>
                                 <?php elseif ($isRegistered): ?>
                                     <form method="post" action="<?= $link->url('home.leaveGroupClass') ?>" class="d-inline">
-                                            <input type="hidden" name="group_class_id" value="<?= $id ?>">
-                                            <button type="submit" class="btn btn-sm btn-danger">Odhlásiť</button>
-                                        </form>
+                                        <input type="hidden" name="group_class_id" value="<?= $id ?>">
+                                        <button type="submit" class="btn btn-sm btn-danger">Odhlásiť</button>
+                                    </form>
                                 <?php elseif ($reservations >= $capacity): ?>
                                     <span class="badge bg-danger">Plné</span>
                                 <?php else: ?>
-                                    <?php if (isset($user) && $user->isLoggedIn()): ?>
+                                    <?php if ($user->isLoggedIn()): ?>
                                         <form method="post" action="<?= $link->url('home.joinGroupClass') ?>" class="d-inline">
                                             <input type="hidden" name="group_class_id" value="<?= $id ?>">
                                             <button type="submit" class="btn btn-sm btn-success">Prihlásiť</button>
@@ -117,7 +92,6 @@ function splitDateTime($datetimeString) {
     </div>
 </div>
 
-<!-- Modal markup (hidden) -->
 <div id="desc-modal" class="desc-modal d-none" aria-hidden="true">
     <div class="desc-modal-backdrop"></div>
     <div class="desc-modal-dialog">
@@ -128,4 +102,3 @@ function splitDateTime($datetimeString) {
         <div id="desc-modal-body" class="desc-modal-body"></div>
     </div>
 </div>
-

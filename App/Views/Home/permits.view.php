@@ -2,26 +2,10 @@
 /** @var \Framework\Support\LinkGenerator $link */
 /** @var \Framework\Support\View $view */
 /** @var \Framework\Auth\AppUser $user */
+/** @var array|\Traversable $permits */
+/** @var string|null $message */
 
 $view->setLayout('root');
-
-$permits = [
-    [
-        'title' => 'Týždenná',
-        'days' => 7,
-        'price' => 20.0,
-    ],
-    [
-        'title' => 'Mesačná',
-        'days' => 30,
-        'price' => 49.99,
-    ],
-    [
-        'title' => 'Ročná',
-        'days' => 365,
-        'price' => 399.99,
-    ],
-];
 ?>
 
 <head>

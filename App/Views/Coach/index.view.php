@@ -1,19 +1,11 @@
 <?php
+/** @var array|\Traversable $groupClasses */
 /** @var \Framework\Auth\AppUser $user */
 /** @var \Framework\Support\LinkGenerator $link */
 /** @var string|null $message */
+/** @var \Framework\Support\View $view */
 
-$trainer_id = $user->getID();
-$groupClasses = \App\Models\Group_Class::getAll('`trainer_id` = ?', [$trainer_id]);
-
-function splitDateTime($datetimeString) {
-    $dt = new DateTime($datetimeString);
-
-    $date = $dt->format('d.m. Y');
-    $time = $dt->format('H:i');
-
-    return [$date, $time];
-}
+$view->setLayout('root');
 ?>
 
 <head>
@@ -32,26 +24,24 @@ function splitDateTime($datetimeString) {
                 <table class="table table-sm table-striped mb-0">
                     <thead>
                     <tr>
-                        <th>ID</th>
-                        <th>Meno</th>
+                        <th>Názov</th>
                         <th>Dátum</th>
                         <th>Čas</th>
-                        <th>Dĺžka trvania (min)</th>
+                        <th>Dĺžka trvania (minúty)</th>
                         <th>Kapacita</th>
                         <th></th>
                     </tr>
                     </thead>
                     <tbody>
-                    <?php foreach ($groupClasses as $gc):
-                        $arr = splitDateTime($gc->getStartDatetime());
-                        $date = $arr[0];
-                        $time = $arr[1];
+                    <?php foreach ($groupClasses as $item):
+                        $gc = $item['model'];
+                        $date = $item['date'];
+                        $time = $item['time'];
                         $id = $gc->getId();
-                        $reservations = 0;
+                        $reservations = $item['reservations'] ?? 0;
                         $desc = trim((string) $gc->getDescription());
                         ?>
                         <tr>
-                            <td><?= $id ?></td>
                             <td><?= $gc->getName() ?></td>
                             <td><?= $date ?></td>
                             <td><?= $time ?></td>
@@ -104,7 +94,7 @@ function splitDateTime($datetimeString) {
 
                     <div class="col-md-3">
                         <label for="gc-date" class="form-label">Dátum</label>
-                        <input id="gc-date" name="date" type="datetime-local" class="form-control" required value="<?= date('Y-m-d\TH:i') ?>"/>
+                        <input id="gc-date" name="date" type="datetime-local" class="form-control" required value="<?= date('Y-m-d\\TH:i') ?>"/>
                     </div>
 
                     <div class="col-md-3">
@@ -117,7 +107,7 @@ function splitDateTime($datetimeString) {
                         <textarea id="gc-description" name="description" class="form-control" rows="3" maxlength="1000"></textarea>
                     </div>
 
-                    <input type="hidden" name="trainer_id" value="<?= $trainer_id ?>" />
+                    <input type="hidden" name="trainer_id" value="<?= $user->getID() ?>" />
 
                     <div class="col-12">
                         <button type="submit" id="button" name="createGroupClass" class="btn btn-primary">Vytvor</button>

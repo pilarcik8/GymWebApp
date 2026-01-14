@@ -5,6 +5,7 @@ namespace App\Controllers;
 use App\Models\Pass;
 use App\Models\Account;
 use App\Models\Group_Class_Participant;
+use App\Models\Group_Class;
 use App\Configuration;
 use Framework\Core\BaseController;
 use Framework\Http\Request;
@@ -43,7 +44,9 @@ class HomeController extends BaseController
      */
     public function index(Request $request): Response
     {
-        return $this->html();
+        $account = Account::getOne($this->user->getId());
+
+        return $this->html(compact('account'));
     }
 
     /**
@@ -64,16 +67,19 @@ class HomeController extends BaseController
         return $this->html();
     }
 
-    public function group_classes(Request $request): Response
-    {
-        return $this->html();
-    }
-
+    // PERNAMETKY
     public function permits(Request $request): Response
     {
-        $message = $_SESSION['flash_message'] ?? null;
+        $permits = [
+            ['title' => 'Týždenná', 'days' => 7,   'price' => 20.0],
+            ['title' => 'Mesačná',  'days' => 30,  'price' => 49.99],
+            ['title' => 'Ročná',    'days' => 365, 'price' => 399.99],
+        ];
 
-        return $this->html(compact('message'));
+        $message = $_SESSION['flash_message'] ?? null;
+        unset($_SESSION['flash_message']);
+
+        return $this->html(compact('permits', 'message'));
     }
 
     public function buy_permit(Request $request): Response
@@ -130,6 +136,58 @@ class HomeController extends BaseController
         $_SESSION['flash_message'] = 'Permanentka zakúpená.';
 
         return $this->redirect($this->url('home.permits'));
+    }
+
+    //SPOLOCNE TRÉNINGY
+    public function group_classes(Request $request): Response
+    {
+        $now = (new \DateTimeImmutable())->format('Y-m-d H:i:s');
+
+        $raw = Group_Class::getAll('`start_datetime` > ?', [$now], 'start_datetime ASC');
+
+        $classIds = array_map(function($g){ return $g->getId(); }, $raw);
+
+        $reservationsMap = [];
+        $registeredMap = [];
+        $trainersMap = [];
+
+        if (count($classIds)) {
+            $ph = implode(',', array_fill(0, count($classIds), '?'));
+            $sql = "SELECT group_class_id, COUNT(*) AS cnt FROM `group_class_participants` WHERE group_class_id IN ($ph) GROUP BY group_class_id";
+            $resRows = Group_Class_Participant::executeRawSQL($sql, $classIds);
+            foreach ($resRows as $r) { $reservationsMap[$r['group_class_id']] = $r['cnt']; }
+
+            if ($this->user->isLoggedIn()) {
+                $userId = $this->user->getID();
+                $params = array_merge([$userId], $classIds);
+                $sql2 = "SELECT group_class_id FROM `group_class_participants` WHERE customer_id = ? AND group_class_id IN ($ph)";
+                $rows2 = Group_Class_Participant::executeRawSQL($sql2, $params);
+                foreach ($rows2 as $r) { $registeredMap[$r['group_class_id']] = true; }
+            }
+
+            $trainerIds = array_values(array_unique(array_map(function($g){ return $g->getTrainerId(); }, $raw)));
+            if (count($trainerIds)) {
+                $phT = implode(',', array_fill(0, count($trainerIds), '?'));
+                $trainerRows = Account::getAll("`id` IN ($phT)", $trainerIds);
+                foreach ($trainerRows as $t) { $trainersMap[$t->getId()] = $t->getFirstName() . ' ' . $t->getLastName(); }
+            }
+        }
+
+        $groupClasses = [];
+        foreach ($raw as $gc) {
+            $id = $gc->getId();
+            $dt = new \DateTimeImmutable($gc->getStartDatetime());
+            $groupClasses[] = [
+                'model' => $gc,
+                'date' => $dt->format('d.m.Y'),
+                'time' => $dt->format('H:i'),
+                'reservations' => isset($reservationsMap[$id]) ? $reservationsMap[$id] : 0,
+                'is_registered' => !empty($registeredMap[$id]),
+                'trainerName' => isset($trainersMap[$gc->getTrainerId()]) ? $trainersMap[$gc->getTrainerId()] : '—',
+            ];
+        }
+
+        return $this->html(compact('now', 'groupClasses'));
     }
 
     public function joinGroupClass(Request $request): Response

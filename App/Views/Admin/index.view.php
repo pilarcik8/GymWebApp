@@ -1,10 +1,8 @@
 <?php
 /** @var array|\Traversable $accounts */
-/** @var \Framework\Auth\AppUser $user */
 /** @var \Framework\Support\LinkGenerator $link */
 /** @var string|null $message */
 
-$accounts = App\Models\Account::getAll();
 ?>
 
 <head>

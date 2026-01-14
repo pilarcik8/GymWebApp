@@ -18,7 +18,7 @@ $view->setLayout('root');
     <div>
         <h1>REGISTRÁCIA</h1>
         <div class="text-center text-danger mb-3">
-            <?= htmlspecialchars($message ?? '', ENT_QUOTES) ?>
+            <?= @$message ?>
         </div>
         <form class="form-signin" method="post" action="<?= $link->url("auth.register") ?>">
             <div class="form-label-group mb-3">

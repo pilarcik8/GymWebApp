@@ -22,11 +22,9 @@ class AdminController extends BaseController
 
     public function index(Request $request): Response
     {
-        // read flash message (if any) and clear it
         $message = $_SESSION['flash_message'] ?? null;
         unset($_SESSION['flash_message']);
 
-        // load accounts for the admin view
         $accounts = Account::getAll();
 
         return $this->html(compact('message', 'accounts'));

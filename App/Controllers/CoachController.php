@@ -2,8 +2,8 @@
 
 namespace App\Controllers;
 
-use App\Models\Account;
 use App\Models\Group_Class;
+use App\Models\Group_Class_Participant;
 use Framework\Core\BaseController;
 use Framework\Http\Request;
 use Framework\Http\Responses\Response;
@@ -42,7 +42,33 @@ class CoachController extends BaseController
         $message = $_SESSION['flash_message'] ?? null;
         unset($_SESSION['flash_message']);
 
-        return $this->html(compact('message'));
+        $raw = Group_Class::getAll('`trainer_id` = ?', [$this->user->getId()], 'start_datetime ASC');
+
+        $classIds = array_map(function($g){ return $g->getId(); }, $raw);
+        $reservationsMap = [];
+        if (count($classIds)) {
+            $ph = implode(',', array_fill(0, count($classIds), '?'));
+            $parts = Group_Class_Participant::getAll("`group_class_id` IN ($ph)", $classIds);
+            foreach ($parts as $p) {
+                $cid = $p->getGroupClassId();
+                if (!isset($reservationsMap[$cid])) $reservationsMap[$cid] = 0;
+                $reservationsMap[$cid]++;
+            }
+        }
+
+        $groupClasses = [];
+        foreach ($raw as $gc) {
+            $dt = new \DateTimeImmutable($gc->getStartDatetime());
+            $id = $gc->getId();
+            $groupClasses[] = [
+                'model' => $gc,
+                'date' => $dt->format('d.m. Y'),
+                'time' => $dt->format('H:i'),
+                'reservations' => isset($reservationsMap[$id]) ? $reservationsMap[$id] : 0,
+            ];
+        }
+
+        return $this->html(compact('message', 'groupClasses'));
     }
 
     /**
@@ -65,7 +91,7 @@ class CoachController extends BaseController
                 }
             }
 
-            $classStart = \DateTime::createFromFormat('Y-m-d\TH:i', $date);
+            $classStart = \DateTime::createFromFormat('Y-m-d\\TH:i', $date);
             $minToStart = new \DateTime('now');
             $minToStart->modify('+24 hours');
 

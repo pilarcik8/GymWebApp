@@ -73,6 +73,14 @@ class AppUser
         return null;
     }
 
+    public function getCredit(): ?float
+    {
+        if ($this->identity instanceof Account) {
+            return $this->identity->getCredit();
+        }
+        return null;
+    }
+
     /**
      * Magic method to forward calls to the identity object if it exists.
      *

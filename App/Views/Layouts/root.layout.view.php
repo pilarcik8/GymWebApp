@@ -1,11 +1,9 @@
 <?php
+/** @var array|\Traversable $account */
 /** @var string $contentHTML */
 /** @var \Framework\Core\IAuthenticator $auth */
 /** @var \Framework\Support\LinkGenerator $link */
 /** @var \Framework\Auth\AppUser $user */
-
-$account = \App\Models\Account::getOne($user->getId());
-
 ?>
 
 <!doctype html>
@@ -77,7 +75,12 @@ $account = \App\Models\Account::getOne($user->getId());
                             <div class="d-flex flex-column align-items-start" style="line-height:1;">
                                 <span id="user-name"><?= $user->getName() ?></span>
                                 <?php if ($user->getRole() === 'customer'): ?>
-                                    <small class="text-muted">Kredit: <?= number_format((float)$account->getCredit(), 2, ',', '') ?> €</small>
+                                    <?php $credit = $user->getCredit(); ?>
+                                    <?php if ($credit !== null): ?>
+                                        <small class="text-muted">Kredit: <?= number_format((float)$credit, 2, ',', '') ?> €</small>
+                                    <?php else: ?>
+                                        <small class="text-muted">Kredit: 0,00 €</small>
+                                    <?php endif; ?>
                                 <?php else : ?>
                                     <small class="text-muted">Roľa: <?= ucfirst($user->getRole()) ?></small>
                                 <?php endif; ?>

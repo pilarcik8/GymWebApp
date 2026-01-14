@@ -41,7 +41,9 @@ class ReceptionController extends BaseController
         $message = $_SESSION['flash_message'] ?? null;
         unset($_SESSION['flash_message']);
 
-        return $this->html(compact('message'));
+        $accounts = Account::getAll('`role` = ?', ['customer']);
+
+        return $this->html(compact('message', 'accounts'));
     }
 
     public function addCredit(Request $request): Response
