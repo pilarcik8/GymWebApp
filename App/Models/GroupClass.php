@@ -4,7 +4,9 @@ namespace App\Models;
 
 use Framework\Core\Model;
 
-class Group_Class extends Model {
+class GroupClass extends Model {
+    protected static ?string $tableName = 'group_classes';
+
     protected ?int $id = null;
     protected string $name;
     protected string $start_datetime;

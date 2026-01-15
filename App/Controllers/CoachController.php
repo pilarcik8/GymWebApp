@@ -2,8 +2,8 @@
 
 namespace App\Controllers;
 
-use App\Models\Group_Class;
-use App\Models\Group_Class_Participant;
+use App\Models\GroupClass;
+use App\Models\GroupClassParticipant;
 use Framework\Core\BaseController;
 use Framework\Http\Request;
 use Framework\Http\Responses\Response;
@@ -42,13 +42,13 @@ class CoachController extends BaseController
         $message = $_SESSION['flash_message'] ?? null;
         unset($_SESSION['flash_message']);
 
-        $raw = Group_Class::getAll('`trainer_id` = ?', [$this->user->getId()], 'start_datetime ASC');
+        $raw = GroupClass::getAll('`trainer_id` = ?', [$this->user->getId()], 'start_datetime ASC');
 
         $classIds = array_map(function($g){ return $g->getId(); }, $raw);
         $reservationsMap = [];
         if (count($classIds)) {
             $ph = implode(',', array_fill(0, count($classIds), '?'));
-            $parts = Group_Class_Participant::getAll("`group_class_id` IN ($ph)", $classIds);
+            $parts = GroupClassParticipant::getAll("`group_class_id` IN ($ph)", $classIds);
             foreach ($parts as $p) {
                 $cid = $p->getGroupClassId();
                 if (!isset($reservationsMap[$cid])) $reservationsMap[$cid] = 0;
@@ -98,7 +98,7 @@ class CoachController extends BaseController
             $classStartFmt = (clone $classStart)->format('Y-m-d H:i:s');
             $classEndFmt = ((clone $classStart)->modify('+'.$duration_minutes.' minutes'))->format('Y-m-d H:i:s');
 
-            $trainer_conflicts = Group_Class::getAll(
+            $trainer_conflicts = GroupClass::getAll(
                 '`trainer_id` = ? AND `start_datetime` < ? AND DATE_ADD(`start_datetime`, INTERVAL `duration_minutes` MINUTE) > ?',
                 [$trainer_id, $classEndFmt, $classStartFmt]
             );
@@ -135,7 +135,7 @@ class CoachController extends BaseController
                 return $this->redirect($this->url("coach.index"));
             }
 
-            $gc_model = new Group_Class($name, $date, $duration_minutes, $trainer_id, $capacity, $description);
+            $gc_model = new GroupClass($name, $date, $duration_minutes, $trainer_id, $capacity, $description);
             $gc_model->save();
             $_SESSION['flash_message'] = "Hodina $name bola úspešne vytvorená.";
         }
@@ -153,14 +153,22 @@ class CoachController extends BaseController
         if ($request->hasValue('deleteGroupClass')) {
             $id = (int)$request->post('id');
 
-            $groupClass = Group_Class::getOne($id);
+            // účastníci hodiny
+            $participants = GroupClassParticipant::getAll('`group_class_id` = ?', [$id]);
+            foreach ($participants as $p) {
+                $p->delete();
+            }
+
+            // hodina
+            $groupClass = GroupClass::getOne($id);
             if (!$groupClass) {
                 $_SESSION['flash_message'] = "Hodina s ID #$id nebola nájdená.";
                 return $this->redirect($this->url("coach.index"));
             }
 
+            $name = $groupClass->getName();
             $groupClass->delete();
-            $_SESSION['flash_message'] = "Hodina s ID #$id bola úspešne zmazaná.";
+            $_SESSION['flash_message'] = "Hodina s $name bola úspešne zmazaná.";
         } else {
             $_SESSION['flash_message'] = "Chyba pri mazaní hodiny.";
         }

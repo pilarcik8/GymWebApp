@@ -4,8 +4,8 @@ namespace App\Controllers;
 
 use App\Models\Pass;
 use App\Models\Account;
-use App\Models\Group_Class_Participant;
-use App\Models\Group_Class;
+use App\Models\GroupClassParticipant;
+use App\Models\GroupClass;
 use App\Configuration;
 use Framework\Core\BaseController;
 use Framework\Http\Request;
@@ -143,7 +143,7 @@ class HomeController extends BaseController
     {
         $now = (new \DateTimeImmutable())->format('Y-m-d H:i:s');
 
-        $raw = Group_Class::getAll('`start_datetime` > ?', [$now], 'start_datetime ASC');
+        $raw = GroupClass::getAll('`start_datetime` > ?', [$now], 'start_datetime ASC');
 
         $classIds = array_map(function($g){ return $g->getId(); }, $raw);
 
@@ -154,14 +154,14 @@ class HomeController extends BaseController
         if (count($classIds)) {
             $ph = implode(',', array_fill(0, count($classIds), '?'));
             $sql = "SELECT group_class_id, COUNT(*) AS cnt FROM `group_class_participants` WHERE group_class_id IN ($ph) GROUP BY group_class_id";
-            $resRows = Group_Class_Participant::executeRawSQL($sql, $classIds);
+            $resRows = GroupClassParticipant::executeRawSQL($sql, $classIds);
             foreach ($resRows as $r) { $reservationsMap[$r['group_class_id']] = $r['cnt']; }
 
             if ($this->user->isLoggedIn()) {
                 $userId = $this->user->getID();
                 $params = array_merge([$userId], $classIds);
                 $sql2 = "SELECT group_class_id FROM `group_class_participants` WHERE customer_id = ? AND group_class_id IN ($ph)";
-                $rows2 = Group_Class_Participant::executeRawSQL($sql2, $params);
+                $rows2 = GroupClassParticipant::executeRawSQL($sql2, $params);
                 foreach ($rows2 as $r) { $registeredMap[$r['group_class_id']] = true; }
             }
 
@@ -209,12 +209,12 @@ class HomeController extends BaseController
             return $this->redirect($this->url('home.group_classes'));
         }
 
-        $existing = Group_Class_Participant::getAll('`customer_id` = ? AND `group_class_id` = ?', [$this->user->getID(), $groupId]);
+        $existing = GroupClassParticipant::getAll('`customer_id` = ? AND `group_class_id` = ?', [$this->user->getID(), $groupId]);
         if (count($existing) > 0) {
             return $this->redirect($this->url('home.group_classes'));
         }
 
-        $participant = new Group_Class_Participant();
+        $participant = new GroupClassParticipant();
         $participant->setCustomerId($this->user->getID());
         $participant->setGroupClassId($groupId);
         $participant->save();
@@ -234,7 +234,7 @@ class HomeController extends BaseController
             return $this->redirect($this->url('home.group_classes'));
         }
 
-        Group_Class_Participant::executeRawSQL(
+        GroupClassParticipant::executeRawSQL(
             'DELETE FROM `group_class_participants` WHERE `customer_id` = ? AND `group_class_id` = ?',
             [$this->user->getID(), $groupId]
         );

@@ -4,8 +4,10 @@ namespace App\Models;
 
 use Framework\Core\Model;
 
-class Group_Class_Participant extends Model
+class GroupClassParticipant extends Model
 {
+    protected static ?string $tableName = 'group_class_participants';
+
     protected ?int $id = null;
     protected ?int $customer_id = null;
     protected ?int $group_class_id = null;
