@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use App\Models\Pass;
 use App\Models\Account;
+use App\Models\TrainerInfo;
 use App\Models\GroupClassParticipant;
 use App\Models\GroupClass;
 use App\Models\Image;
@@ -60,7 +61,33 @@ class HomeController extends BaseController
      */
     public function coaches(Request $request): Response
     {
-        return $this->html();
+        $coaches = [];
+
+        $trainers = Account::getAll('`role` = ?', ['trainer']);
+        foreach ($trainers as $trainer) {
+            $infoRow = TrainerInfo::getAll('`trainer_id` = ?', [$trainer->getId()]);
+            $info = $infoRow[0] ?? null;
+
+            $short = $info ? $info->getShort() : '';
+            $desc = $info ? $info->getDescription() : '';
+
+            $imgPath = '/images/deafult-trainer-photo.jpg';
+            if ($info && $info->getImageId()) {
+                $imgModel = Image::getOne($info->getImageId());
+                if ($imgModel) {
+                    $imgPath = rtrim(Configuration::UPLOAD_URL, '/').'/trainer/'.$imgModel->getFilename();
+                }
+            }
+
+            $coaches[] = [
+                'name' => $trainer->getName(),
+                'short' => $short,
+                'desc' => $desc,
+                'img' => $imgPath,
+            ];
+        }
+
+        return $this->html(compact('coaches'));
     }
 
     // PERNAMETKY

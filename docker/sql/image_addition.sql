@@ -14,3 +14,6 @@ CREATE TABLE `images` (
   CONSTRAINT `fk_gallery_created_by` FOREIGN KEY (`created_by`) REFERENCES `accounts` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
 
+ALTER TABLE `images` CHANGE COLUMN `use` `img_use` ENUM('trainer','gallery') NOT NULL DEFAULT 'gallery';
+
+

@@ -10,6 +10,7 @@ class Image extends Model
     protected string $filename = '';
     protected ?string $title = null;
     protected ?string $alt = null;
+    protected string $img_use = 'gallery';
     protected ?int $created_by = null;
     protected ?string $created_at = null;
 
@@ -31,6 +32,11 @@ class Image extends Model
     public function getAlt(): ?string
     {
         return $this->alt;
+    }
+
+    public function getUse(): string
+    {
+        return $this->img_use;
     }
 
     public function getCreatedBy(): ?int
@@ -61,6 +67,11 @@ class Image extends Model
     public function setAlt(?string $alt): void
     {
         $this->alt = $alt;
+    }
+
+    public function setUse(string $use): void
+    {
+        $this->img_use = $use;
     }
 
     public function setCreatedBy(?int $created_by): void

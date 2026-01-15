@@ -4,6 +4,9 @@ namespace App\Controllers;
 
 use App\Models\GroupClass;
 use App\Models\GroupClassParticipant;
+use App\Models\TrainerInfo;
+use App\Models\Image;
+use App\Configuration;
 use Framework\Core\BaseController;
 use Framework\Http\Request;
 use Framework\Http\Responses\Response;
@@ -37,6 +40,7 @@ class CoachController extends BaseController
      *
      * @return Response The response object containing the rendered HTML for the home page.
      */
+    /*- Tvorba skupinových hodín pre trénerov -*/
     public function index(Request $request): Response
     {
         $message = $_SESSION['flash_message'] ?? null;
@@ -175,4 +179,143 @@ class CoachController extends BaseController
         return $this->redirect($this->url("coach.index"));
     }
 
+    /* Edit profilu trénera */
+    public function trainerProfileEditor(Request $request): Response
+    {
+        $message = $_SESSION['flash_message'] ?? null;
+        unset($_SESSION['flash_message']);
+
+        $infos = TrainerInfo::getAll('`trainer_id` = ?', [$this->user->getId()]);
+        $trainerInfo = $infos[0] ?? null;
+        if (!$trainerInfo) {
+            $trainerInfo = new TrainerInfo();
+            $trainerInfo->setTrainerId($this->user->getId());
+        }
+
+        // všetky obrázky použiteľné pre trénerov (img_use = 'trainer')
+        $trainerImages = Image::getAll('`img_use` = ?', ['trainer']);
+
+        return $this->html(compact('message', 'trainerInfo', 'trainerImages'), 'trainer_profile_editor');
+    }
+
+    /* Edit profilu trénera - spracovanie formulára (bez obrázka) */
+    public function editTrainerInfo(Request $request): Response
+    {
+        if (!$request->hasValue('editTrainerInfo')) {
+            return $this->redirect($this->url('coach.trainerProfileEditor'));
+        }
+
+        $infos = TrainerInfo::getAll('`trainer_id` = ?', [$this->user->getId()]);
+        $trainerInfo = $infos[0] ?? null;
+        if (!$trainerInfo) {
+            $trainerInfo = new TrainerInfo();
+            $trainerInfo->setTrainerId($this->user->getId());
+        }
+
+        $short = trim((string)$request->post('short'));
+        $description = trim((string)$request->post('description'));
+
+        $trainerInfo->setShort($short);
+        $trainerInfo->setDescription($description);
+        $trainerInfo->setTrainerId($this->user->getId());
+        $trainerInfo->save();
+
+        $_SESSION['flash_message'] = 'Profil trénera bol uložený.';
+        return $this->redirect($this->url('coach.trainerProfileEditor'));
+    }
+
+    public function editTrainerPhoto(Request $request): Response
+    {
+        if (!$request->hasValue('editTrainerPhoto')) {
+            return $this->redirect($this->url('coach.trainerProfileEditor'));
+        }
+
+        $infos = TrainerInfo::getAll('`trainer_id` = ?', [$this->user->getId()]);
+        $trainerInfo = $infos[0] ?? null;
+        if (!$trainerInfo) {
+            $trainerInfo = new TrainerInfo();
+            $trainerInfo->setTrainerId($this->user->getId());
+        }
+
+        if (!isset($_FILES['image']) || $_FILES['image']['error'] !== UPLOAD_ERR_OK) {
+            $_SESSION['flash_message'] = 'Nebola vybratá žiadna fotka alebo nastala chyba pri nahrávaní.';
+            return $this->redirect($this->url('coach.trainerProfileEditor'));
+        }
+
+        $file = $_FILES['image'];
+        $allowed = [
+            'image/jpeg' => 'jpg',
+            'image/png' => 'png',
+            'image/gif' => 'gif',
+            'image/webp' => 'webp',
+        ];
+        $maxBytes = 5 * 1024 * 1024;
+
+        $finfo = new \finfo(FILEINFO_MIME_TYPE);
+        $mime = $finfo->file($file['tmp_name']);
+        if (!isset($allowed[$mime])) {
+            $_SESSION['flash_message'] = 'Nepovolený typ súboru.';
+            return $this->redirect($this->url('coach.trainerProfileEditor'));
+        }
+
+        if ($file['size'] > $maxBytes) {
+            $_SESSION['flash_message'] = 'Súbor je príliš veľký (max 5 MB).';
+            return $this->redirect($this->url('coach.trainerProfileEditor'));
+        }
+
+        if (false === @getimagesize($file['tmp_name'])) {
+            $_SESSION['flash_message'] = 'Súbor nie je platný obrázok.';
+            return $this->redirect($this->url('coach.trainerProfileEditor'));
+        }
+
+        $uploadDir = rtrim(Configuration::UPLOAD_DIR, '/\\') . DIRECTORY_SEPARATOR . 'trainer' . DIRECTORY_SEPARATOR;
+        $publicDir = __DIR__ . '/../../public/' . $uploadDir;
+        if (!is_dir($publicDir)) {
+            mkdir($publicDir, 0755, true);
+        }
+
+        $ext = $allowed[$mime];
+        $unique = bin2hex(random_bytes(10)) . '.' . $ext;
+        $dest = $publicDir . $unique;
+
+        if (!move_uploaded_file($file['tmp_name'], $dest)) {
+            $_SESSION['flash_message'] = 'Chyba pri ukladaní súboru.';
+            return $this->redirect($this->url('coach.trainerProfileEditor'));
+        }
+
+        $imageId = $trainerInfo->getImageId();
+        if ($imageId) {
+            $img = Image::getOne($imageId);
+            if ($img) {
+                // zmaž starý súbor, ak existuje
+                $oldFilename = $img->getFilename();
+                if ($oldFilename) {
+                    $oldPath = $publicDir . $oldFilename;
+                    if (is_file($oldPath)) {
+                        @unlink($oldPath);
+                    }
+                }
+
+                $img->setFilename($unique);
+                $img->setUse('trainer');
+                $img->setCreatedBy($this->user->getId());
+                $img->save();
+            }
+        } else {
+            $img = new Image();
+            $img->setFilename($unique);
+            $img->setUse('trainer');
+            $img->setCreatedBy($this->user->getId());
+            $img->setCreatedAt((new \DateTime())->format('Y-m-d H:i:s'));
+            $img->save();
+            $imageId = $img->getId();
+        }
+
+        $trainerInfo->setImageId($imageId);
+        $trainerInfo->setTrainerId($this->user->getId());
+        $trainerInfo->save();
+
+        $_SESSION['flash_message'] = 'Fotografia bola aktualizovaná.';
+        return $this->redirect($this->url('coach.trainerProfileEditor'));
+    }
 }

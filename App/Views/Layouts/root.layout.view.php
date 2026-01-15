@@ -121,7 +121,12 @@
                             <?php if ($user->getRole() === "trainer") { ?>
                                 <li>
                                     <a class="dropdown-item" href="<?= $link->url("coach.index") ?>">
-                                        <i class="fa-solid fa-user-tie"></i> Tréner Panel
+                                        <i class="fa-solid fa-user-tie"></i> Vaše tréningy
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="<?= $link->url("coach.trainerProfileEditor") ?>">
+                                        <i class="fa-solid fa-id-badge"></i> Profil trénera
                                     </a>
                                 </li>
                                 <li><hr class="dropdown-divider"></li>

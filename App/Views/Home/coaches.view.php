@@ -1,31 +1,9 @@
 <?php
 /** @var \Framework\Support\LinkGenerator $link */
 /** @var \Framework\Support\View $view */
+/** @var array|\Traversable $coaches */
 
 $view->setLayout('root');
-
-// TODO: Vymenit data trenerov za data z databazy
-// TODO: Uprav model a databazu
-$coaches = [
-        [
-                'name' => 'MAREK',
-                'short' => 'SILOVÝ TRÉNING A KONDÍCIA',
-                'desc' => 'Marek je certifikovaný tréner so zameraním na silový a funkčný tréning. Pomôže vám vybudovať svaly, zlepšiť výkon a naučí vás správnu techniku cvičenia.',
-                'img'  => '/images/coach-1.png',
-        ],
-        [
-                'name' => 'LUCIA',
-                'short' => 'FITNESS A ZDRAVÝ ŽIVOTNÝ ŠTÝL',
-                'desc' => 'Lucia je energická trénerka, ktorá kombinuje silový tréning s prvkami mobility a jógy. Pomôže vám cítiť sa lepšie, silnejšie a sebavedomejšie každý deň.',
-                'img'  => '/images/coach-2.png',
-        ],
-        [
-                'name' => 'MARTIN',
-                'short' => 'SILOVÝ TRÉNING A KONDÍCIA',
-                'desc' => 'Martin sa zameriava na rozvoj sily, správnu techniku a dlhodobú kondíciu. Jeho tréningy sú dynamické, premyslené a prispôsobené úrovni každého klienta.',
-                'img'  => '/images/coach-3.png',
-        ],
-];
 ?>
 
 <link rel="stylesheet" href="<?= $link->asset('/css/coaches.css') ?>">
@@ -46,9 +24,13 @@ $coaches = [
         <div class="slashed-rectangle">
             <div class="slashed-rectangle-content">
                 <div>
-                    <h5 class="coach-name"><?= $coach['name'] ?></h5>
-                    <p class="coach-short-info"><?= $coach['short'] ?></p>
-                    <?= $coach['desc'] ?>
+                    <h5 class="coach-name"><?= htmlspecialchars($coach['name']) ?></h5>
+                    <?php if (!empty($coach['short'])): ?>
+                        <p class="coach-short-info"><?= htmlspecialchars($coach['short']) ?></p>
+                    <?php endif; ?>
+                    <?php if (!empty($coach['desc'])): ?>
+                        <p class="coach-desc"><?= nl2br(htmlspecialchars($coach['desc'])) ?></p>
+                    <?php endif; ?>
                 </div>
             </div>
             <button class="btn btn-primary">Rezervuj</button>

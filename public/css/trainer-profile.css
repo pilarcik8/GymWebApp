@@ -1,0 +1,66 @@
+.coach-panel {
+    /* Pozadie */
+    background-image: linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.45)), url('/images/log-reg-background.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center center;
+
+    /* Text a Form */
+    display: flex;
+    align-items: center; /* vertically center form */
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+}
+
+.coach-panel .container {
+    max-width: 50rem;
+}
+
+h2 {
+    color: #9f9809;
+    font-size: 2rem;
+    font-weight: 800;
+}
+
+label {
+    font-size: 1.2rem;
+    border-bottom: 0.2rem solid #9f9809;
+    margin-bottom: 1rem;
+}
+
+.trainer-forms-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.trainer-form-box {
+    border-top: 0.2rem solid #9f9809;
+    border-bottom: 0.2rem solid #9f9809;
+    border-right: 0.1rem solid #9f9809;
+    border-left: 0.1rem solid #9f9809;
+    background: #1a1a1a;
+    flex: 1 1 20rem;
+    padding: 1rem;
+}
+
+.form-text {
+    color: #cccccc;
+    font-style: italic;
+    font-size: 0.8rem;
+}
+
+.current-image {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.current-image img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 0.5rem;
+    border: 1px solid rgba(0,0,0,0.3);
+}
