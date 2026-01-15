@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use App\Models\Account;
 use App\Models\Image;
+use App\Configuration;
 use Framework\Core\BaseController;
 use Framework\Http\Request;
 use Framework\Http\Responses\Response;
@@ -156,8 +157,9 @@ class AdminController extends BaseController
         }
 
         /*-Uloženie súboru a záznamu do DB-*/
-        // Vytvoriť adresár pre nahrané súbory v public, ak neexistuje
-        $publicDir = __DIR__ . '/../../public/uploads/gallery/';
+        // Vytvoriť adresár pre nahrané súbory v public podľa Configuration::UPLOAD_DIR
+        $uploadDir = rtrim(Configuration::UPLOAD_DIR, '/\\') . DIRECTORY_SEPARATOR . 'gallery' . DIRECTORY_SEPARATOR;
+        $publicDir = __DIR__ . '/../../public/' . $uploadDir;
         if (!is_dir($publicDir)) mkdir($publicDir, 0755, true);
 
         // vytvor jedinečné meno súboru
@@ -176,7 +178,7 @@ class AdminController extends BaseController
         $alt = trim((string)$request->post('alt')) ?: null;
 
         $img = new Image();
-        $img->setFromRequest(new Request()); // noop but consistent with pattern
+        $img->setFromRequest(new Request());
         $img->setFilename($unique);
         $img->setTitle($title);
         $img->setAlt($alt);
@@ -184,7 +186,6 @@ class AdminController extends BaseController
         $img->setCreatedAt((new \DateTime())->format('Y-m-d H:i:s'));
         $img->save();
 
-        $_SESSION['flash_message'] = 'Image uploaded.';
         return $this->redirect($this->url('admin.gallery'));
     }
 
@@ -200,16 +201,39 @@ class AdminController extends BaseController
         $id = (int)$request->post('id');
         $img = Image::getOne($id);
         if (!$img) {
-            $_SESSION['flash_message'] = 'Image not found.';
+            $_SESSION['flash_message'] = 'Obrázok sme neboli schopní nájsť.';
             return $this->redirect($this->url('admin.gallery'));
         }
 
-        $publicDir = __DIR__ . '/../../public/uploads/gallery/';
-        $path = $publicDir . $img->getFilename();
-        if (is_file($path)) @unlink($path);
+        // cesta
+        $publicRoot = realpath(__DIR__ . '/../../public');
+        $uploadDir = trim(str_replace(['\\','/'], DIRECTORY_SEPARATOR, Configuration::UPLOAD_DIR), DIRECTORY_SEPARATOR);
+        $galleryDir = $publicRoot . DIRECTORY_SEPARATOR . $uploadDir . DIRECTORY_SEPARATOR . 'gallery' . DIRECTORY_SEPARATOR;
+
+        $filename = basename($img->getFilename());
+        $path = $galleryDir . $filename;
+
+        // odstrániť súbor zo servera
+        if (is_file($path)) {
+            try {
+                if (!@unlink($path)) {
+                    $_SESSION['flash_message'] = 'Súbor sa nepodarilo odstrániť zo servera.';
+                    // still attempt to delete DB record to keep DB consistent
+                    $img->delete();
+                    return $this->redirect($this->url('admin.gallery'));
+                }
+            } catch (\Throwable $e) {
+                $_SESSION['flash_message'] = 'Chyba pri odstraňovaní súboru: ' . $e->getMessage();
+                $img->delete();
+                return $this->redirect($this->url('admin.gallery'));
+            }
+        } else {
+            $_SESSION['flash_message'] = 'Súbor neexistoval na disku, záznam bude odstránený.';
+            $img->delete();
+            return $this->redirect($this->url('admin.gallery'));
+        }
 
         $img->delete();
-        $_SESSION['flash_message'] = 'Image deleted.';
         return $this->redirect($this->url('admin.gallery'));
     }
 }

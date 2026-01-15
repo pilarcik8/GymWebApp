@@ -6,6 +6,7 @@ use App\Models\Pass;
 use App\Models\Account;
 use App\Models\GroupClassParticipant;
 use App\Models\GroupClass;
+use App\Models\Image;
 use App\Configuration;
 use Framework\Core\BaseController;
 use Framework\Http\Request;
@@ -58,11 +59,6 @@ class HomeController extends BaseController
      * @return Response The response object containing the rendered HTML for the contact page.
      */
     public function coaches(Request $request): Response
-    {
-        return $this->html();
-    }
-
-    public function gallery(Request $request): Response
     {
         return $this->html();
     }
@@ -241,6 +237,14 @@ class HomeController extends BaseController
 
 
         return $this->redirect($this->url('home.group_classes'));
+    }
+
+    //GALERIA
+    public function gallery(Request $request): Response
+    {
+        $images = Image::getAll(null, [], 'created_at DESC');
+
+        return $this->html(compact('images'));
     }
 }
 

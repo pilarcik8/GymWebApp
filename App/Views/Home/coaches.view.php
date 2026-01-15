@@ -28,9 +28,7 @@ $coaches = [
 ];
 ?>
 
-<head>
-    <link rel="stylesheet" href="<?= $link->asset('/css/coaches.css') ?>">
-</head>
+<link rel="stylesheet" href="<?= $link->asset('/css/coaches.css') ?>">
 
 <!-- Hero -->
 <div class="hero-coaches-wrapper">
