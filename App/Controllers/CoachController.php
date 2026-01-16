@@ -10,6 +10,8 @@ use App\Configuration;
 use Framework\Core\BaseController;
 use Framework\Http\Request;
 use Framework\Http\Responses\Response;
+use App\Models\Training;
+use App\Models\Account;
 
 
 class CoachController extends BaseController
@@ -46,6 +48,7 @@ class CoachController extends BaseController
         $message = $_SESSION['flash_message'] ?? null;
         unset($_SESSION['flash_message']);
 
+        // skupinové hodiny
         $raw = GroupClass::getAll('`trainer_id` = ?', [$this->user->getId()], 'start_datetime ASC');
 
         $classIds = array_map(function($g){ return $g->getId(); }, $raw);
@@ -72,7 +75,42 @@ class CoachController extends BaseController
             ];
         }
 
-        return $this->html(compact('message', 'groupClasses'));
+        // osobné tréningy tohto trénera
+        $trainerId = $this->user->getId();
+        $trainingsRaw = Training::getAll('`trainer_id` = ?', [$trainerId], '`start_date` DESC');
+
+        $customerIds = [];
+        foreach ($trainingsRaw as $t) {
+            if ($t->getCustomerId() !== null) {
+                $customerIds[] = $t->getCustomerId();
+            }
+        }
+        $customerIds = array_values(array_unique($customerIds));
+
+        $customersMap = [];
+        if ($customerIds) {
+            $placeholders = implode(',', array_fill(0, count($customerIds), '?'));
+            $customers = Account::getAll("`id` IN ($placeholders)", $customerIds);
+            foreach ($customers as $c) {
+                $customersMap[$c->getId()] = $c->getFirstName() . ' ' . $c->getLastName();
+            }
+        }
+
+        $personalTrainings = [];
+        foreach ($trainingsRaw as $tr) {
+            $start = $tr->getStartDate();
+            $dt = $start ? new \DateTimeImmutable($start) : null;
+            $personalTrainings[] = [
+                'model' => $tr,
+                'date' => $dt ? $dt->format('d.m. Y') : '',
+                'time' => $dt ? $dt->format('H:i') : '',
+                'customerName' => $tr->getCustomerId() && isset($customersMap[$tr->getCustomerId()])
+                    ? $customersMap[$tr->getCustomerId()]
+                    : '—',
+            ];
+        }
+
+        return $this->html(compact('message', 'groupClasses', 'personalTrainings'));
     }
 
     /**
