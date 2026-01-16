@@ -8,6 +8,7 @@ use App\Models\TrainerInfo;
 use App\Models\GroupClassParticipant;
 use App\Models\GroupClass;
 use App\Models\Image;
+use App\Models\Training;
 use App\Configuration;
 use Framework\Core\BaseController;
 use Framework\Http\Request;
@@ -63,6 +64,9 @@ class HomeController extends BaseController
     {
         $coaches = [];
 
+        $message = $_SESSION['flash_message'] ?? null;
+        unset($_SESSION['flash_message']);
+
         $trainers = Account::getAll('`role` = ?', ['trainer']);
         foreach ($trainers as $trainer) {
             $infoRow = TrainerInfo::getAll('`trainer_id` = ?', [$trainer->getId()]);
@@ -75,11 +79,12 @@ class HomeController extends BaseController
             if ($info && $info->getImageId()) {
                 $imgModel = Image::getOne($info->getImageId());
                 if ($imgModel) {
-                    $imgPath = rtrim(Configuration::UPLOAD_URL, '/').'/trainer/'.$imgModel->getFilename();
+                    $imgPath = rtrim(Configuration::UPLOAD_URL, '/') . '/trainer/' . $imgModel->getFilename();
                 }
             }
 
             $coaches[] = [
+                'id' => $trainer->getId(),
                 'name' => $trainer->getName(),
                 'short' => $short,
                 'desc' => $desc,
@@ -87,7 +92,7 @@ class HomeController extends BaseController
             ];
         }
 
-        return $this->html(compact('coaches'));
+        return $this->html(compact('coaches', 'message'));
     }
 
     // PERNAMETKY
@@ -273,5 +278,82 @@ class HomeController extends BaseController
 
         return $this->html(compact('images'));
     }
-}
 
+    public function buy_training(Request $request): Response
+    {
+        if (!$this->user->isLoggedIn()) {
+            return $this->redirect($this->url('auth.login'));
+        }
+
+        if (!$request->hasValue('buy_training')) {
+            return $this->redirect($this->url('home.coaches'));
+        }
+
+        $customer = Account::getOne($this->user->getId());
+        if (!$customer) {
+            $_SESSION['flash_message'] = 'Účet nebol nájdený.';
+            return $this->redirect($this->url('home.coaches'));
+        }
+
+        if ($customer->getRole() !== 'customer') {
+            $_SESSION['flash_message'] = 'Len zákazníci môžu kupovať tréningy u trénera.';
+            return $this->redirect($this->url('home.coaches'));
+        }
+
+        $trainerId = (int)$request->post('trainer_id');
+        $price = (float)$request->post('price');
+        $startInput = $request->post('start_datetime');
+
+        if ($trainerId <= 0 || $price <= 0) {
+            $_SESSION['flash_message'] = 'Neplatné údaje pre nákup tréningu.';
+            return $this->redirect($this->url('home.coaches'));
+        }
+
+        // parse start datetime from HTML datetime-local input (Y-m-d\TH:i)
+        $startDateTime = null;
+        if ($startInput) {
+            $startDateTime = \DateTime::createFromFormat('Y-m-d\TH:i', $startInput) ?: null;
+        }
+
+        if ($startDateTime === null) {
+            $_SESSION['flash_message'] = 'Prosím, vyberte platný dátum a čas tréningu.';
+            return $this->redirect($this->url('home.coaches'));
+        }
+
+        // basic check: start must be in the future (with small tolerance)
+        $now = new \DateTime();
+        if ($startDateTime <= $now) {
+            $_SESSION['flash_message'] = 'Dátum a čas tréningu musí byť v budúcnosti.';
+            return $this->redirect($this->url('home.coaches'));
+        }
+
+        $trainer = Account::getOne($trainerId);
+        if (!$trainer || $trainer->getRole() !== 'trainer') {
+            $_SESSION['flash_message'] = 'Tréner nebol nájdený.';
+            return $this->redirect($this->url('home.coaches'));
+        }
+
+        if ($customer->getCredit() < $price) {
+            $_SESSION['flash_message'] = 'Nedostatok kreditu na nákup tréningu.';
+            return $this->redirect($this->url('home.coaches'));
+        }
+
+        $customer->setCredit($customer->getCredit() - $price);
+        $customer->save();
+
+        $this->app->getSession()->set(Configuration::IDENTITY_SESSION_KEY, $customer);
+
+        // create Training record
+        $purchaseDate = new \DateTime();
+        $training = new Training();
+        $training->setCustomerId($customer->getId());
+        $training->setTrainerId($trainerId);
+        $training->setPurchaseDate($purchaseDate->format('Y-m-d H:i:s'));
+        $training->setStartDate($startDateTime->format('Y-m-d H:i:s'));
+        $training->save();
+
+        $_SESSION['flash_message'] = 'Tréning u trénera bol úspešne zakúpený.';
+
+        return $this->redirect($this->url('home.coaches'));
+    }
+}

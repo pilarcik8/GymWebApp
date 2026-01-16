@@ -7,7 +7,6 @@ $view->setLayout('root');
 ?>
 
 <link rel="stylesheet" href="<?= $link->asset('/css/coaches.css') ?>">
-
 <!-- Hero -->
 <div class="hero-coaches-wrapper">
     <img src="<?= $link->asset('/images/couches-hero.png') ?>" alt="Trener joga" class="hero-img">
@@ -17,6 +16,11 @@ $view->setLayout('root');
         <p>sú tu, aby vám pomohli dosiahnuť <span class="hero-text-yellow">vaše ciele</span></p>
     </div>
 </div>
+<?php if (!empty($message ?? null)): ?>
+    <div class="alert alert-info">
+        <?= htmlspecialchars($message) ?>
+    </div>
+<?php endif; ?>
 
 <!-- Treneri rendered by loop -->
 <?php foreach ($coaches as $coach): ?>
@@ -31,9 +35,18 @@ $view->setLayout('root');
                     <?php if (!empty($coach['desc'])): ?>
                         <p class="coach-desc"><?= nl2br(htmlspecialchars($coach['desc'])) ?></p>
                     <?php endif; ?>
+                    <p class="coach-training-price">Cena individuálneho tréningu: 20 €</p>
                 </div>
             </div>
-            <button class="btn btn-primary">Rezervuj</button>
+            <form method="post" action="<?= $link->url('home.buy_training') ?>">
+                <input type="hidden" name="trainer_id" value="<?= (int)$coach['id'] ?>">
+                <input type="hidden" name="price" value="20.0">
+                <label>
+                    Dátum a čas tréningu:
+                    <input type="datetime-local" name="start_datetime" required>
+                </label>
+                <button class="btn btn-primary" type="submit" name="buy_training">Kúpiť</button>
+            </form>
         </div>
         <img class="coach-foto-left" src="<?= $link->asset($coach['img']) ?>" alt="trener">
     </div>
