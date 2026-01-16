@@ -7,47 +7,62 @@ $view->setLayout('root');
 ?>
 
 <link rel="stylesheet" href="<?= $link->asset('/css/coaches.css') ?>">
+<script src="<?= $link->asset('/js/coaches.js') ?>"></script>
+
 <!-- Hero -->
 <div class="hero-coaches-wrapper">
     <img src="<?= $link->asset('/images/couches-hero.png') ?>" alt="Trener joga" class="hero-img">
 
     <div class="hero-text-container">
         <h2>NAŠI <span class="hero-text-yellow">TRÉNERI</span> </h2>
-        <p>sú tu, aby vám pomohli dosiahnuť <span class="hero-text-yellow">vaše ciele</span></p>
+        <h5>sú tu, aby vám pomohli dosiahnuť <span class="hero-text-yellow">vaše ciele</span></h5>
     </div>
 </div>
 <?php if (!empty($message ?? null)): ?>
     <div class="alert alert-info">
-        <?= htmlspecialchars($message) ?>
+        <?= $message ?>
     </div>
 <?php endif; ?>
 
-<!-- Treneri rendered by loop -->
-<?php foreach ($coaches as $coach): ?>
-    <div class="container">
-        <div class="slashed-rectangle">
-            <div class="slashed-rectangle-content">
-                <div>
-                    <h5 class="coach-name"><?= htmlspecialchars($coach['name']) ?></h5>
-                    <?php if (!empty($coach['short'])): ?>
-                        <p class="coach-short-info"><?= htmlspecialchars($coach['short']) ?></p>
-                    <?php endif; ?>
-                    <?php if (!empty($coach['desc'])): ?>
-                        <p class="coach-desc"><?= nl2br(htmlspecialchars($coach['desc'])) ?></p>
-                    <?php endif; ?>
-                    <p class="coach-training-price">Cena individuálneho tréningu: 20 €</p>
-                </div>
+<?php foreach ($coaches as $index => $coach): ?>
+    <div class="coach-card">
+        <div class="coach-card-main">
+            <div class="coach-text-block">
+                <h5 class="coach-name"><?= $coach['name'] ?></h5>
+                <?php if (!empty($coach['short'])): ?>
+                    <p class="coach-short-info"><?= $coach['short'] ?></p>
+                <?php endif; ?>
+                <?php if (!empty($coach['desc'])): ?>
+                    <p class="coach-desc"><?= $coach['desc'] ?></p>
+                <?php endif; ?>
+                <p class="coach-training-price">
+                    Cena individuálneho tréningu:
+                    <?= number_format((float)$coach['price'], 2, ',', ' ') ?> €
+                </p>
             </div>
-            <form method="post" action="<?= $link->url('home.buy_training') ?>">
+
+            <div class="coach-photo-block">
+                <img class="coach-photo" src="<?= $link->asset($coach['img']) ?>" alt="trener">
+            </div>
+        </div>
+
+        <div class="coach-card-actions">
+            <form method="post" action="<?= $link->url('home.buy_training') ?>" class="trainer-booking-form" data-coach-id="<?= (int)$coach['id'] ?>">
                 <input type="hidden" name="trainer_id" value="<?= (int)$coach['id'] ?>">
-                <input type="hidden" name="price" value="20.0">
-                <label>
-                    Dátum a čas tréningu:
-                    <input type="datetime-local" name="start_datetime" required>
-                </label>
-                <button class="btn btn-primary" type="submit" name="buy_training">Kúpiť</button>
+                <input type="hidden" name="price" value="<?= (string)$coach['price'] ?>">
+
+                <div class="trainer-booking-initial">
+                    <button type="button" class="btn btn-primary trainer-booking-start">Kúpiť</button>
+                </div>
+
+                <div class="trainer-booking-details" style="display: none;">
+                    <label>
+                        Dátum a čas tréningu:
+                        <input type="datetime-local" name="start_datetime" required>
+                    </label>
+                    <button class="btn btn-primary" type="submit" name="buy_training">Potvrdiť kúpu</button>
+                </div>
             </form>
         </div>
-        <img class="coach-foto-left" src="<?= $link->asset($coach['img']) ?>" alt="trener">
     </div>
 <?php endforeach; ?>

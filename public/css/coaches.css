@@ -2,6 +2,10 @@ body {
     background-color: #1a1a1a;
 }
 
+.hero-img {
+    border-bottom: solid 0.1rem white;
+}
+
 /* HERO */
 .hero-coaches-wrapper {
     position: relative;
@@ -29,8 +33,60 @@ body {
     margin-bottom: 0.5rem;
 }
 
-/* TRENERY */
-/* Tlacidlo */
+.alert {
+    max-width: 80vw;
+    margin: 1rem auto 0;
+}
+
+/* COACH CARDS */
+.coach-card {
+    max-width: 90vw;
+    margin: 2rem auto;
+    padding: 1.5rem 1.75rem;
+    background: #111;
+    border-radius: 0.75rem;
+    border: 0.15rem solid #9f9809;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+}
+
+h5 {
+    font-size: 1rem;
+}
+
+.coach-card-main {
+    display: flex;
+    gap: 1.5rem;
+    align-items: stretch;
+}
+
+.coach-text-block {
+    flex: 2;
+    min-width: 0;
+}
+
+.coach-photo-block {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.coach-photo {
+    max-width: 220px;
+    width: 100%;
+    height: auto;
+    border: 2px solid #9f9809;
+    border-radius: 0.7rem;
+    object-fit: cover;
+}
+
+.coach-card-actions {
+    margin-top: 1rem;
+    display: flex;
+    justify-content: flex-end;
+}
+
+/* Button */
 .btn-primary {
     background: black;
     border: 0.1rem solid white;
@@ -42,65 +98,77 @@ body {
     border: 2px solid white;
 }
 
-/* Text */
 .coach-name {
-    color: black;
-    font-weight: 1000;
+    color: #fff;
+    font-weight: 800;
+    margin-bottom: 0.5rem;
 }
 
 .coach-short-info {
-    color: #302e2e;;
+    color: #9b7f7f;
+    margin-bottom: 0.35rem;
+    font-style: italic;
+    font-weight: 600;
 }
 
-/* --- KOSODĹŽNIK --- */
-.coach-foto {
-    border: white solid 0.01rem;
-    margin-right: 1.4rem;
-    width: 10rem;
-    height: auto;
+.coach-desc {
+    color: #e0e0e0;
+    margin-bottom: 0.35rem;
+    padding-left: 0.5rem;
 }
 
-.slashed-rectangle {
-    width: 40rem;
-    height: 10.4rem;
-    background: #9f9809;
-    transform: skewX(-15deg);
-    padding: 1.5rem;
-    border: 0.05rem solid white;
-    left: calc(50% - 350px);
-    margin-bottom: 2rem;
-    z-index: 1;
+.coach-training-price {
+    margin: 0.35rem 0 0;
+    font-weight: 600;
+    color: #f0e68c;
+    padding-left: 0.5rem;
+
 }
 
-.slashed-rectangle-content {
-    transform: skewX(15deg);
-    color: white;
-    font-size: 0.8rem;
-    font-family: sans-serif;
-}
-
-.coach-foto-left {
-    z-index: 0;
-    position: absolute;
-    border: white solid 0.01rem;
-    right: 3rem;
-    height: 10.4rem;
-    width: auto;
-}
-
-.container {
+/* Booking details */
+.trainer-booking-details label {
     display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    align-items: center;
+    color: #f5f5f5;
 }
 
-@media (max-width: 1450px) {
-    .coach-foto-left  {
-        visibility: hidden;
+.trainer-booking-details input[type="datetime-local"] {
+    background: #222;
+    border: 1px solid #555;
+    color: #f5f5f5;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+}
+
+.trainer-booking-details {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    align-items: center;
+}
+
+/* Responsive tweaks */
+@media (max-width: 900px) {
+    .coach-card-main {
+        flex-direction: column;
+    }
+
+    .coach-photo-block {
+        justify-content: flex-start;
+    }
+
+    .coach-card-actions {
+        justify-content: flex-start;
     }
 }
 
-/* mobil */
 @media (max-width: 630px) {
-     .hero-text-container {
-        margin-top: 0;
+    .hero-text-container {
+        margin: 0.3rem ;
+        position: relative;
+        top: 0;
+        left: 0;
     }
 }

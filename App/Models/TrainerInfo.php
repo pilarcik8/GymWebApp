@@ -13,6 +13,7 @@ class TrainerInfo extends Model
     protected string $description = '';
     protected int $trainer_id;
     protected ?int $image_id = null;
+    protected float $purchase_cost = 20.00;
 
     public function getId(): ?int
     {
@@ -39,6 +40,11 @@ class TrainerInfo extends Model
         return $this->image_id;
     }
 
+    public function getPurchaseCost(): float
+    {
+        return $this->purchase_cost;
+    }
+
     public function setId(?int $id): void
     {
         $this->id = $id;
@@ -63,5 +69,9 @@ class TrainerInfo extends Model
     {
         $this->image_id = $image_id;
     }
-}
 
+    public function setPurchaseCost(float $purchase_cost): void
+    {
+        $this->purchase_cost = $purchase_cost;
+    }
+}

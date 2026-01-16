@@ -74,6 +74,7 @@ class HomeController extends BaseController
 
             $short = $info ? $info->getShort() : '';
             $desc = $info ? $info->getDescription() : '';
+            $price = $info ? $info->getPurchaseCost() : 20.0;
 
             $imgPath = '/images/deafult-trainer-photo.jpg';
             if ($info && $info->getImageId()) {
@@ -89,6 +90,7 @@ class HomeController extends BaseController
                 'short' => $short,
                 'desc' => $desc,
                 'img' => $imgPath,
+                'price' => $price,
             ];
         }
 
@@ -134,7 +136,7 @@ class HomeController extends BaseController
         $activePasses = Pass::getCount('`user_id` = ? AND `expiration_date` > ?', [$userId, $now->format('Y-m-d H:i:s')]);
 
         if ($activePasses > 0) {
-            $_SESSION['flash_message'] = 'Máte aktívnu permanentku.';
+            $_SESSION['flash_message'] = 'Už máte aktívnu permanentku.';
             return $this->redirect($this->url('home.permits'));
         }
 

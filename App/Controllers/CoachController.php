@@ -215,9 +215,16 @@ class CoachController extends BaseController
         $short = trim((string)$request->post('short'));
         $description = trim((string)$request->post('description'));
 
+        $purchaseCostRaw = $request->post('purchase_cost');
+        $purchaseCost = is_numeric($purchaseCostRaw) ? (float)$purchaseCostRaw : 20.0;
+        if ($purchaseCost < 0) {
+            $purchaseCost = 0.0;
+        }
+
         $trainerInfo->setShort($short);
         $trainerInfo->setDescription($description);
         $trainerInfo->setTrainerId($this->user->getId());
+        $trainerInfo->setPurchaseCost($purchaseCost);
         $trainerInfo->save();
 
         $_SESSION['flash_message'] = 'Profil trénera bol uložený.';

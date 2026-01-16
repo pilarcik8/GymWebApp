@@ -81,6 +81,7 @@ $view->setLayout('root');
                     <tr>
                         <th>Deň zakúpenia</th>
                         <th>Deň tréningu</th>
+                        <th>Čas tréningu</th>
                         <th>Tréner</th>
                     </tr>
                     </thead>
@@ -89,11 +90,12 @@ $view->setLayout('root');
                         <tr>
                             <td><?= $t['purchase_formatted'] ?></td>
                             <td><?= $t['start_date_formatted'] ?></td>
+                            <td><?= $t['start_time_formatted'] ?? '' ?></td>
                             <td><?= $t['trainerName'] ?></td>
                         </tr>
                     <?php } ?>
                     <?php if (empty($trainings)): ?>
-                        <tr><td colspan="3">Žiadne tréningy neboli nájdené.</td></tr>
+                        <tr><td colspan="4">Žiadne tréningy neboli nájdené.</td></tr>
                     <?php endif; ?>
                     </tbody>
                 </table>

@@ -10,6 +10,7 @@ $view->setLayout('root');
 
 $shortValue = $trainerInfo ? $trainerInfo->getShort() : '';
 $descValue = $trainerInfo ? $trainerInfo->getDescription() : '';
+$priceValue = $trainerInfo ? number_format($trainerInfo->getPurchaseCost(), 2, '.', '') : '';
 
 $currentImage = null;
 if ($trainerInfo && $trainerInfo->getImageId()) {
@@ -65,6 +66,20 @@ if ($trainerInfo && $trainerInfo->getImageId()) {
                             placeholder="Napiš viac o sebe, tvojich skúsenostiach a špecializáciách..."
                         ><?= $descValue ?></textarea>
                         <small class="form-text">*Detailný popis tvojho profilu, ktorý sa zobrazí v tvojom profili.</small>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label for="purchase_cost">Cena za jeden osobný tréning (€)</label>
+                        <input
+                            type="number"
+                            step="0.01"
+                            min="0"
+                            id="purchase_cost"
+                            name="purchase_cost"
+                            class="form-control"
+                            value="<?= $priceValue ?>"
+                        >
+                        <small class="form-text">*Táto cena sa použije pri nákupe osobného tréningu cez stránku trénerov.</small>
                     </div>
 
                     <!-- Submit Button for text info -->
