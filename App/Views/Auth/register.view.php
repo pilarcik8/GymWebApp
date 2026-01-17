@@ -10,14 +10,14 @@
 $view->setLayout('root');
 ?>
 
-<link rel="stylesheet" href="<?= $link->asset('/css/auth/register.css') ?>">
+<link rel="stylesheet" href="<?= $link->asset('/css/log-reg.css') ?>">
 <script>
     // existujúce emaily pre klientsku validáciu (môže byť prázdne pole)
     window.existingEmails = <?= json_encode($existingEmails ?? []) ?>;
 </script>
 <script src="<?= $link->asset('js/register.js') ?>"></script>
 
-<div class="register-hero">
+<div class="hero">
     <div>
         <h1>REGISTRÁCIA</h1>
         <div class="text-center text-danger mb-3">

@@ -8,9 +8,9 @@
 $view->setLayout('root');
 ?>
 
-<link rel="stylesheet" href="<?= $link->asset('/css/auth/login.css') ?>">
+<link rel="stylesheet" href="<?= $link->asset('/css/log-reg.css') ?>">
 
-<div class="login-hero">
+<div class="hero">
     <div>
         <div>
             <h1>PRIHLÁSENIE</h1>

@@ -48,7 +48,7 @@ class Configuration
     /**
      * Flag to determine whether to display all SQL queries after the application output for debugging purposes.
      */
-    public const SHOW_SQL_QUERY = true;
+    public const SHOW_SQL_QUERY = false;
 
     /**
      * Class name for the database naming conventions implementation. This should adhere to the IDbConvention interface.
@@ -60,7 +60,7 @@ class Configuration
      * Flag to enable or disable detailed exception stack traces. This feature is intended for development purposes
      * only.
      */
-    public const SHOW_EXCEPTION_DETAILS = true;
+    public const SHOW_EXCEPTION_DETAILS = false;
 
     /**
      * Class name for the authenticator. This class must implement the IAuthenticator interface. Comment out this line
