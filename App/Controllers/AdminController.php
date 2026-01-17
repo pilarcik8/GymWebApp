@@ -39,7 +39,18 @@ class AdminController extends BaseController
     {
         if ($request->hasValue('changeRole')) {
             $id = (int)$request->post('id');
+            if ($id <= 0) {
+                $_SESSION['flash_message'] = 'Neplatné ID používateľa.';
+                return $this->redirect($this->url('admin.index'));
+            }
+
             $role = $request->post('role');
+            // server-side whitelist povolených rolí
+            $allowedRoles = ['admin', 'trainer', 'customer', 'reception'];
+            if (!in_array($role, $allowedRoles, true)) {
+                $_SESSION['flash_message'] = 'Neplatná rola používateľa.';
+                return $this->redirect($this->url('admin.index'));
+            }
 
             $account = Account::getOne($id);
             if ($account) {
@@ -177,6 +188,16 @@ class AdminController extends BaseController
         $title = trim((string)$request->post('title')) ?: null;
         $alt = trim((string)$request->post('alt')) ?: null;
 
+        // obmedziť dĺžku textov
+        if ($title !== null && mb_strlen($title) > 255) {
+            $_SESSION['flash_message'] = 'Nadpis je príliš dlhý (max 255 znakov).';
+            return $this->redirect($this->url('admin.gallery'));
+        }
+        if ($alt !== null && mb_strlen($alt) > 255) {
+            $_SESSION['flash_message'] = 'Alt text je príliš dlhý (max 255 znakov).';
+            return $this->redirect($this->url('admin.gallery'));
+        }
+
         $img = new Image();
         $img->setFromRequest(new Request());
         $img->setFilename($unique);
@@ -244,6 +265,11 @@ class AdminController extends BaseController
         }
 
         $id = (int)$request->post('id');
+        if ($id <= 0) {
+            $_SESSION['flash_message'] = 'Neplatné ID obrázka.';
+            return $this->redirect($this->url('admin.gallery'));
+        }
+
         $img = Image::getOne($id);
         if (!$img) {
             $_SESSION['flash_message'] = 'Obrázok nebol nájdený.';
@@ -252,6 +278,15 @@ class AdminController extends BaseController
 
         $title = trim((string)$request->post('title')) ?: null;
         $alt = trim((string)$request->post('alt')) ?: null;
+
+        if ($title !== null && mb_strlen($title) > 255) {
+            $_SESSION['flash_message'] = 'Nadpis je príliš dlhý (max 255 znakov).';
+            return $this->redirect($this->url('admin.gallery'));
+        }
+        if ($alt !== null && mb_strlen($alt) > 255) {
+            $_SESSION['flash_message'] = 'Alt text je príliš dlhý (max 255 znakov).';
+            return $this->redirect($this->url('admin.gallery'));
+        }
 
         $img->setTitle($title);
         $img->setAlt($alt);

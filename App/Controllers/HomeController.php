@@ -122,9 +122,31 @@ class HomeController extends BaseController
             return $this->redirect($this->url('home.permits'));
         }
 
-        $userId = (int)$request->post('user_id');
+        // server-side definícia povolených permanentiek
+        $allowedPermits = [
+            ['days' => 7,   'price' => 20.0],
+            ['days' => 30,  'price' => 49.99],
+            ['days' => 365, 'price' => 399.99],
+        ];
+
         $days = (int)$request->post('days');
         $price = (float)$request->post('price');
+
+        $permitValid = false;
+        foreach ($allowedPermits as $p) {
+            if ($p['days'] === $days && (float)$p['price'] === $price) {
+                $permitValid = true;
+                break;
+            }
+        }
+
+        if (!$permitValid) {
+            $_SESSION['flash_message'] = 'Neplatná voľba permanentky.';
+            return $this->redirect($this->url('home.permits'));
+        }
+
+        // identita kupujúceho vždy zo session
+        $userId = $this->user->getId();
         $account = Account::getOne($userId);
 
         if (!$account) {
@@ -233,9 +255,30 @@ class HomeController extends BaseController
         $groupId = null;
         if ($request->isPost()) {
             $groupId = $request->post('group_class_id');
+            $groupId = $groupId !== null ? (int)$groupId : null;
         }
 
         if ($groupId === null || $groupId <= 0) {
+            return $this->redirect($this->url('home.group_classes'));
+        }
+
+        $groupClass = GroupClass::getOne($groupId);
+        if (!$groupClass) {
+            $_SESSION['flash_message'] = 'Skupinová hodina nebola nájdená.';
+            return $this->redirect($this->url('home.group_classes'));
+        }
+
+        // kontrola kapacity
+        $currentCount = GroupClassParticipant::getCount('`group_class_id` = ?', [$groupId]);
+        if ($currentCount >= $groupClass->getCapacity()) {
+            $_SESSION['flash_message'] = 'Táto hodina je už plne obsadená.';
+            return $this->redirect($this->url('home.group_classes'));
+        }
+
+        // kontrola, či hodina nie je v minulosti
+        $start = new \DateTimeImmutable($groupClass->getStartDatetime());
+        if ($start <= new \DateTimeImmutable('now')) {
+            $_SESSION['flash_message'] = 'Nie je možné sa prihlásiť na hodinu v minulosti.';
             return $this->redirect($this->url('home.group_classes'));
         }
 
@@ -258,6 +301,10 @@ class HomeController extends BaseController
             return $this->redirect($this->url('auth.login'));
         }
 
+        if ($this->user->getRole() !== 'customer') {
+            return $this->redirect($this->url('home.group_classes'));
+        }
+
         $groupId = $request->post('group_class_id');
         $groupId = $groupId !== null ? (int)$groupId : null;
         if ($groupId === null || $groupId <= 0) {
@@ -268,7 +315,6 @@ class HomeController extends BaseController
             'DELETE FROM `group_class_participants` WHERE `customer_id` = ? AND `group_class_id` = ?',
             [$this->user->getID(), $groupId]
         );
-
 
         return $this->redirect($this->url('home.group_classes'));
     }
@@ -303,12 +349,27 @@ class HomeController extends BaseController
             return $this->redirect($this->url('home.coaches'));
         }
 
-        $trainerId = (int)$request->post('trainer_id');
-        $price = (float)$request->post('price');
+        $trainerIdRaw = $request->post('trainer_id');
+        $trainerId = $trainerIdRaw !== null ? (int)$trainerIdRaw : 0;
         $startInput = $request->post('start_datetime');
 
-        if ($trainerId <= 0 || $price <= 0) {
-            $_SESSION['flash_message'] = 'Neplatné údaje pre nákup tréningu.';
+        if ($trainerId <= 0) {
+            $_SESSION['flash_message'] = 'Neplatný tréner.';
+            return $this->redirect($this->url('home.coaches'));
+        }
+
+        $trainer = Account::getOne($trainerId);
+        if (!$trainer || $trainer->getRole() !== 'trainer') {
+            $_SESSION['flash_message'] = 'Tréner nebol nájdený.';
+            return $this->redirect($this->url('home.coaches'));
+        }
+
+        // cena tréningu sa berie zo server-side TrainerInfo, nie z POST
+        $infoRow = TrainerInfo::getAll('`trainer_id` = ?', [$trainerId]);
+        $info = $infoRow[0] ?? null;
+        $price = $info ? (float)$info->getPurchaseCost() : 20.0;
+        if ($price <= 0 || $price > 1000) {
+            $_SESSION['flash_message'] = 'Neplatná cena tréningu.';
             return $this->redirect($this->url('home.coaches'));
         }
 
@@ -325,12 +386,6 @@ class HomeController extends BaseController
         $now = new \DateTime();
         if ($startDateTime <= $now) {
             $_SESSION['flash_message'] = 'Dátum a čas tréningu musí byť v budúcnosti.';
-            return $this->redirect($this->url('home.coaches'));
-        }
-
-        $trainer = Account::getOne($trainerId);
-        if (!$trainer || $trainer->getRole() !== 'trainer') {
-            $_SESSION['flash_message'] = 'Tréner nebol nájdený.';
             return $this->redirect($this->url('home.coaches'));
         }
 

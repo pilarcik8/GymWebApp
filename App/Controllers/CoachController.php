@@ -122,18 +122,47 @@ class CoachController extends BaseController
             $name = trim((string) $request->post('name'));
             $date = $request->post('date');
             $duration_minutes = (int)$request->post('duration_minutes');
-            $trainer_id = (int)$request->post('trainer_id');
+            // Tréner je vždy aktuálne prihlásený používateľ, neberieme ho z POST
+            $trainer_id = $this->user->getId();
             $capacity = (int)$request->post('capacity');
             $description = $request->post('description');
+
+            // Základná validácia vstupov
+            if ($name === '') {
+                $_SESSION['flash_message'] = 'Názov hodiny je povinný.';
+                return $this->redirect($this->url('coach.index'));
+            }
+            if (mb_strlen($name) > 255) {
+                $_SESSION['flash_message'] = 'Názov hodiny je príliš dlhý (max 255 znakov).';
+                return $this->redirect($this->url('coach.index'));
+            }
+
+            if ($duration_minutes <= 0 || $duration_minutes > 240) {
+                $_SESSION['flash_message'] = 'Dĺžka hodiny musí byť v rozmedzí 1 – 240 minút.';
+                return $this->redirect($this->url('coach.index'));
+            }
+
+            if ($capacity <= 0 || $capacity > 100) {
+                $_SESSION['flash_message'] = 'Kapacita musí byť v rozmedzí 1 – 100 osôb.';
+                return $this->redirect($this->url('coach.index'));
+            }
 
             if ($description !== null) {
                 $description = trim((string) $description);
                 if ($description === '') {
                     $description = null;
+                } elseif (mb_strlen($description) > 1000) {
+                    $_SESSION['flash_message'] = 'Popis je príliš dlhý (max 1000 znakov).';
+                    return $this->redirect($this->url('coach.index'));
                 }
             }
 
             $classStart = \DateTime::createFromFormat('Y-m-d\\TH:i', $date);
+            if (!$classStart) {
+                $_SESSION['flash_message'] = 'Neplatný formát dátumu a času.';
+                return $this->redirect($this->url('coach.index'));
+            }
+
             $minToStart = new \DateTime('now');
             $minToStart->modify('+24 hours');
 
@@ -173,7 +202,7 @@ class CoachController extends BaseController
 
             // kontrola ci je datum aspon 24 hod od aktualneho casu
             if ($classStart < $minToStart) {
-                $_SESSION['flash_message'] = "Dátum musí byť aspoň: " . $classStart->format('d.m. Y H.i');
+                $_SESSION['flash_message'] = "Dátum musí byť aspoň o 24 hodín neskôr.";
                 return $this->redirect($this->url("coach.index"));
             }
 
@@ -194,6 +223,22 @@ class CoachController extends BaseController
     public function deleteGroupClass(Request $request): Response {
         if ($request->hasValue('deleteGroupClass')) {
             $id = (int)$request->post('id');
+            if ($id <= 0) {
+                $_SESSION['flash_message'] = 'Neplatné ID hodiny.';
+                return $this->redirect($this->url('coach.index'));
+            }
+
+            $groupClass = GroupClass::getOne($id);
+            if (!$groupClass) {
+                $_SESSION['flash_message'] = "Hodina s ID #$id nebola nájdená.";
+                return $this->redirect($this->url("coach.index"));
+            }
+
+            // Overenie, že hodina patrí aktuálnemu trénerovi
+            if ($groupClass->getTrainerId() !== $this->user->getId()) {
+                $_SESSION['flash_message'] = 'Nemáte oprávnenie mazať túto hodinu.';
+                return $this->redirect($this->url('coach.index'));
+            }
 
             // účastníci hodiny
             $participants = GroupClassParticipant::getAll('`group_class_id` = ?', [$id]);
@@ -201,16 +246,9 @@ class CoachController extends BaseController
                 $p->delete();
             }
 
-            // hodina
-            $groupClass = GroupClass::getOne($id);
-            if (!$groupClass) {
-                $_SESSION['flash_message'] = "Hodina s ID #$id nebola nájdená.";
-                return $this->redirect($this->url("coach.index"));
-            }
-
             $name = $groupClass->getName();
             $groupClass->delete();
-            $_SESSION['flash_message'] = "Hodina s $name bola úspešne zmazaná.";
+            $_SESSION['flash_message'] = "Hodina $name bola úspešne zmazaná.";
         } else {
             $_SESSION['flash_message'] = "Chyba pri mazaní hodiny.";
         }
@@ -253,10 +291,33 @@ class CoachController extends BaseController
         $short = trim((string)$request->post('short'));
         $description = trim((string)$request->post('description'));
 
+        // Validácia dĺžky textov
+        if (mb_strlen($short) > 255) {
+            $_SESSION['flash_message'] = 'Krátky popis je príliš dlhý (max 255 znakov).';
+            return $this->redirect($this->url('coach.trainerProfileEditor'));
+        }
+        if (mb_strlen($description) > 1000) {
+            $_SESSION['flash_message'] = 'Popis je príliš dlhý (max 1000 znakov).';
+            return $this->redirect($this->url('coach.trainerProfileEditor'));
+        }
+
         $purchaseCostRaw = $request->post('purchase_cost');
-        $purchaseCost = is_numeric($purchaseCostRaw) ? (float)$purchaseCostRaw : 20.0;
+        if ($purchaseCostRaw === null || $purchaseCostRaw === '') {
+            $purchaseCost = 20.0;
+        } elseif (!is_numeric($purchaseCostRaw)) {
+            $_SESSION['flash_message'] = 'Cena musí byť číslo.';
+            return $this->redirect($this->url('coach.trainerProfileEditor'));
+        } else {
+            $purchaseCost = (float)$purchaseCostRaw;
+        }
+
         if ($purchaseCost < 0) {
-            $purchaseCost = 0.0;
+            $_SESSION['flash_message'] = 'Cena nemôže byť záporná.';
+            return $this->redirect($this->url('coach.trainerProfileEditor'));
+        }
+        if ($purchaseCost > 1000) {
+            $_SESSION['flash_message'] = 'Cena je príliš vysoká (max 1000).';
+            return $this->redirect($this->url('coach.trainerProfileEditor'));
         }
 
         $trainerInfo->setShort($short);

@@ -50,31 +50,58 @@ class AuthController extends BaseController
             return $this->redirect($this->url("home.index"));
         }
 
-        $logged = null;
         $email = '';
+        $message = null;
 
         if ($request->hasValue('submit')) {
-            $email = trim($request->value('email'));
-            $logged = $this->app->getAuthenticator()->login($email, $request->value('password'));
+            $email = trim((string)$request->value('email'));
+            $password = (string)$request->value('password');
+
+            // Server-side validácia vstupov
+            if ($email === '' || $password === '') {
+                $message = 'Email aj heslo sú povinné.';
+                return $this->html(compact('message', 'email'));
+            }
+
+            if (mb_strlen($email) > 255) {
+                $message = 'Email je príliš dlhý (max 255 znakov).';
+                return $this->html(compact('message', 'email'));
+            }
+
+            if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                $message = 'Zadajte platný email.';
+                return $this->html(compact('message', 'email'));
+            }
+
+            if (mb_strlen($password) < 6) {
+                $message = 'Heslo musí mať minimálne 6 znakov.';
+                return $this->html(compact('message', 'email'));
+            }
+
+            if (mb_strlen($password) > 255) {
+                $message = 'Heslo je príliš dlhé.';
+                return $this->html(compact('message', 'email'));
+            }
+
+            $logged = $this->app->getAuthenticator()->login($email, $password);
             if ($logged) {
                 $role = $this->app->getAuthenticator()->getUser()->getRole();
                 if ($role === 'admin') {
                     return $this->redirect($this->url("admin.index"));
-                }
-                else if ($role === 'customer') {
+                } elseif ($role === 'customer') {
                     return $this->redirect($this->url("customer.index"));
-                }
-                else if ($role === 'trainer') {
+                } elseif ($role === 'trainer') {
                     return $this->redirect($this->url("coach.index"));
-                }
-                else if ($role === 'reception') {
+                } elseif ($role === 'reception') {
                     return $this->redirect($this->url("reception.index"));
                 }
             }
+
+            // ak autentifikácia zlyhala
+            $message = 'Nesprávny email alebo heslo';
         }
 
-        $message = $logged === false ? 'Nesprávny email alebo heslo' : null;
-        return $this->html(compact("message", "email"));
+        return $this->html(compact('message', 'email'));
     }
 
     /**
@@ -109,35 +136,67 @@ class AuthController extends BaseController
         }
 
         $message = null;
+        $email = '';
+        $first_name = '';
+        $last_name = '';
 
         if ($request->hasValue('register')) {
-            $email = trim($request->value('email'));
-            $first_name = trim($request->value('first_name'));
-            $last_name = trim($request->value('last_name'));
-            $password = $request->value('password');
-            $password2 = $request->value('password2');
+            $email = trim((string)$request->value('email'));
+            $first_name = trim((string)$request->value('first_name'));
+            $last_name = trim((string)$request->value('last_name'));
+            $password = (string)$request->value('password');
+            $password2 = (string)$request->value('password2');
 
-            if (strlen($password) < 6) {
+            // Povinné polia
+            if ($email === '' || $first_name === '' || $last_name === '' || $password === '' || $password2 === '') {
+                $message = 'Všetky polia sú povinné.';
+                return $this->html(compact('message', 'email', 'first_name', 'last_name'));
+            }
+
+            // Email formát a dĺžka
+            if (mb_strlen($email) > 255) {
+                $message = 'Email je príliš dlhý (max 255 znakov).';
+                return $this->html(compact('message', 'email', 'first_name', 'last_name'));
+            }
+            if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                $message = 'Zadajte platný email.';
+                return $this->html(compact('message', 'email', 'first_name', 'last_name'));
+            }
+
+            // Mená – rozumné dĺžky
+            if (mb_strlen($first_name) > 100 || mb_strlen($last_name) > 100) {
+                $message = 'Meno a priezvisko môžu mať maximálne 100 znakov.';
+                return $this->html(compact('message', 'email', 'first_name', 'last_name'));
+            }
+
+            // Heslo – min/max dĺžka a zhoda
+            if (mb_strlen($password) < 6) {
                 $message = "Heslo musí mať minimálne 6 znakov";
                 return $this->html(compact("message", "email", "first_name", "last_name"));
+            }
+            if (mb_strlen($password) > 255) {
+                $message = 'Heslo je príliš dlhé.';
+                return $this->html(compact('message', 'email', 'first_name', 'last_name'));
             }
             if ($password !== $password2) {
                 $message = "Heslá sa nezhodujú";
                 return $this->html(compact("message", "email", "first_name", "last_name"));
             }
 
+            // Unikátnosť emailu
             $existingUsers = Account::getCount('`email` = ?', [$email]);
             if ($existingUsers > 0) {
                 $message = "Daný email je už zaregistrovaný";
-                return $this->html(compact("message", "first_name", "last_name"));
+                return $this->html(compact("message", "email", "first_name", "last_name"));
             }
+
             $hash = password_hash($password, PASSWORD_DEFAULT);
-
             $userModel = new Account($email, $hash, $first_name, $last_name);
-
             $userModel->save();
-            return $this->redirect($this->url("auth.login")); // spravne registrovany
+
+            return $this->redirect($this->url("auth.login"));
         }
-        return $this->html(compact("message")); // zobrazit formular
+
+        return $this->html(compact("message", "email", "first_name", "last_name"));
     }
 }

@@ -12,7 +12,24 @@ h5 {
 }
 
 .card {
-    max-width: 50vw;
     padding: 1rem;
-    margin-bottom: 1rem;
+    margin: 2rem;
+}
+
+.image-card {
+    padding: 1rem;
+    max-width: 20vw;
+    border: 0.01rem solid black;
+    border-radius: 0.2rem;
+}
+
+.card-img-top {
+    border: 0.01rem solid black;
+}
+
+@media (max-width: 992px) {
+    .image-card {
+        max-width: 25vw;
+
+    }
 }
