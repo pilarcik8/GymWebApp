@@ -7,10 +7,9 @@
 $view->setLayout('root');
 ?>
 
-<head>
-    <link rel="stylesheet" href="<?= $link->asset('/css/group-classes.css') ?>">
-    <script src="<?= $link->asset('/js/group-classes.js') ?>"></script>
-</head>
+
+<link rel="stylesheet" href="<?= $link->asset('/css/home/group-classes.css') ?>">
+<script src="<?= $link->asset('/js/group-classes.js') ?>"></script>
 
 <div class="bg-img">
     <div class="group-card container py-4">

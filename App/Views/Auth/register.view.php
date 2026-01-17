@@ -9,10 +9,8 @@
 $view->setLayout('root');
 ?>
 
-<head>
-    <link rel="stylesheet" href="<?= $link->asset('/css/register.css') ?>">
-    <script src="<?= $link->asset('js/register.js') ?>"></script>
-</head>
+<link rel="stylesheet" href="<?= $link->asset('/css/auth/register.css') ?>">
+<script src="<?= $link->asset('js/register.js') ?>"></script>
 
 <div class="register-hero">
     <div>

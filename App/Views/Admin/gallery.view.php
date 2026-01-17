@@ -6,6 +6,8 @@ use App\Configuration;
 
 ?>
 
+<link rel="stylesheet" href="<?= $link->asset('/css/user/gallery-editor.css') ?>">
+
 <div class="container-fluid py-4">
     <h2>Editor Galérie</h2>
 
@@ -50,15 +52,27 @@ use App\Configuration;
                 <div class="d-flex flex-wrap gap-3">
                     <?php if (!empty($images)) : ?>
                         <?php foreach ($images as $img) : ?>
-                            <div class="card" style="width: 12rem;">
-                                <div class="card-body p-2 text-center">
-                                    <div class="fw-semibold mb-2"><?= $img->getTitle() ?: 'Bez nadpisu' ?></div>
-                                </div>
-
+                            <div class="card">
                                 <img src="<?= $link->asset(trim(Configuration::UPLOAD_URL, '/') . '/gallery/' . $img->getFilename()) ?>" class="card-img-top" alt="<?= $img->getAlt() ?: '' ?>">
 
-                                <div class="card-body p-2">
-                                    <div class="text-muted small mb-2"><?= $img->getAlt() ?: 'Bez alternatívneho textu' ?></div>
+                                    <!-- Formulár na úpravu nadpisu a alt textu -->
+                                    <form method="post" action="<?= $link->url('admin.updateGalleryImageInfo') ?>" class="mb-2">
+                                        <input type="hidden" name="updateGalleryImageInfo" value="1">
+                                        <input type="hidden" name="id" value="<?= $img->getId() ?>">
+
+                                        <div class="mb-1">
+                                            <label class="form-label form-label-sm mb-0">Nadpis</label>
+                                            <input type="text" name="title" class="form-control form-control-sm" value="<?= htmlspecialchars($img->getTitle() ?? '', ENT_QUOTES) ?>">
+                                        </div>
+
+                                        <div class="mb-1">
+                                            <label class="form-label form-label-sm mb-0">Alt text</label>
+                                            <input type="text" name="alt" class="form-control form-control-sm" value="<?= htmlspecialchars($img->getAlt() ?? '', ENT_QUOTES) ?>">
+                                        </div>
+
+                                        <button class="btn btn-primary btn-sm w-100" type="submit">Upraviť info</button>
+                                    </form>
+
                                     <form method="post" action="<?= $link->url('admin.deleteGalleryImage') ?>" onsubmit="return confirm('Naozaj chcete odstrániť tento obrázok?');">
                                         <input type="hidden" name="deleteGalleryImage" value="1">
                                         <input type="hidden" name="id" value="<?= $img->getId() ?>">

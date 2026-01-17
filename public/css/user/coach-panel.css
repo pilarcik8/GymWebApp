@@ -1,0 +1,10 @@
+.coach-card-form {
+    background: #ffffff;
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+    border-radius: 0.25rem;
+}
+
+#form .form-label {
+    color: #000000;
+}

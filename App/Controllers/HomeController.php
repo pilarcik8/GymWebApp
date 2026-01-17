@@ -281,6 +281,7 @@ class HomeController extends BaseController
         return $this->html(compact('images'));
     }
 
+    // TRÉNERI
     public function buy_training(Request $request): Response
     {
         if (!$this->user->isLoggedIn()) {
@@ -311,7 +312,6 @@ class HomeController extends BaseController
             return $this->redirect($this->url('home.coaches'));
         }
 
-        // parse start datetime from HTML datetime-local input (Y-m-d\TH:i)
         $startDateTime = null;
         if ($startInput) {
             $startDateTime = \DateTime::createFromFormat('Y-m-d\TH:i', $startInput) ?: null;
@@ -322,7 +322,6 @@ class HomeController extends BaseController
             return $this->redirect($this->url('home.coaches'));
         }
 
-        // basic check: start must be in the future (with small tolerance)
         $now = new \DateTime();
         if ($startDateTime <= $now) {
             $_SESSION['flash_message'] = 'Dátum a čas tréningu musí byť v budúcnosti.';
@@ -345,7 +344,6 @@ class HomeController extends BaseController
 
         $this->app->getSession()->set(Configuration::IDENTITY_SESSION_KEY, $customer);
 
-        // create Training record
         $purchaseDate = new \DateTime();
         $training = new Training();
         $training->setCustomerId($customer->getId());

@@ -8,10 +8,8 @@
 $view->setLayout('root');
 ?>
 
-<head>
-    <link rel="stylesheet" href="<?= $link->asset('/css/reception.css') ?>">
-    <script src="<?= $link->asset('js/reception.js') ?>"></script>
-</head>
+<link rel="stylesheet" href="<?= $link->asset('/css/user/reception.css') ?>">
+<script src="<?= $link->asset('js/reception.js') ?>"></script>
 
 <div class="container-fluid">
     <div class="row">
@@ -44,7 +42,7 @@ $view->setLayout('root');
                             <td>
                                 <button type="button"
                                         id="button-add-amount"
-                                        class="btn btn-sm btn-primary open-add-credit"
+                                        class="button-green btn btn-sm btn-primary open-add-credit"
                                         data-id="<?= $id ?>"
                                         data-name="<?= $name ?>">
                                     Pridať

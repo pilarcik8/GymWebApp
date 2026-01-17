@@ -86,18 +86,6 @@ h5 {
     justify-content: flex-end;
 }
 
-/* Button */
-.btn-primary {
-    background: black;
-    border: 0.1rem solid white;
-    font-weight: 700;
-}
-
-.btn-primary:hover {
-    background: #9f9809;
-    border: 2px solid white;
-}
-
 .coach-name {
     color: #fff;
     font-weight: 800;
@@ -176,4 +164,8 @@ h5 {
         top: 0;
         left: 0;
     }
+}
+
+.btn-primary:active {
+    border: 0.1rem solid white !important;
 }

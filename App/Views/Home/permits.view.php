@@ -8,10 +8,8 @@
 $view->setLayout('root');
 ?>
 
-<head>
-    <link rel="stylesheet" href="<?= $link->asset('/css/permits.css') ?>">
-    <script src="<?= $link->asset('js/permits.js') ?>"></script>
-</head>
+<link rel="stylesheet" href="<?= $link->asset('/css/home/permits.css') ?>">
+<script src="<?= $link->asset('js/permits.js') ?>"></script>
 
 <?php if (!empty($message)): ?>
     <div id="modal-overlay" class="modal-overlay" role="dialog" aria-modal="true">

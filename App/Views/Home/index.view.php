@@ -5,9 +5,8 @@
 $view->setLayout('root');
 ?>
 
-<head>
-    <link rel="stylesheet" href="<?= $link->asset('/css/home-page.css') ?>">
-</head>
+
+<link rel="stylesheet" href="<?= $link->asset('/css/home/home-page.css') ?>">
 
 <div class="home-hero-div">
     <img src="<?= $link->asset('/images/home-hero.png') ?>" alt="Beziaci muz" class="hero-img">

@@ -236,4 +236,28 @@ class AdminController extends BaseController
         $img->delete();
         return $this->redirect($this->url('admin.gallery'));
     }
+
+    public function updateGalleryImageInfo(Request $request): Response
+    {
+        if (!$request->hasValue('updateGalleryImageInfo')) {
+            return $this->redirect($this->url('admin.gallery'));
+        }
+
+        $id = (int)$request->post('id');
+        $img = Image::getOne($id);
+        if (!$img) {
+            $_SESSION['flash_message'] = 'Obrázok nebol nájdený.';
+            return $this->redirect($this->url('admin.gallery'));
+        }
+
+        $title = trim((string)$request->post('title')) ?: null;
+        $alt = trim((string)$request->post('alt')) ?: null;
+
+        $img->setTitle($title);
+        $img->setAlt($alt);
+        $img->save();
+
+        $_SESSION['flash_message'] = 'Informácie o obrázku boli aktualizované.';
+        return $this->redirect($this->url('admin.gallery'));
+    }
 }

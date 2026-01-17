@@ -8,7 +8,7 @@ use App\Configuration;
 $view->setLayout('root');
 ?>
 
-<link rel="stylesheet" href="<?= $link->asset('/css/gallery.css') ?>">
+<link rel="stylesheet" href="<?= $link->asset('/css/home/gallery.css') ?>">
 <h2>Naše <span id="title-white-word">spomienky</span> </h2>
 
 <div class="gallery-container container py-4">

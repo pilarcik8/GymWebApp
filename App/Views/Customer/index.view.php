@@ -10,10 +10,8 @@
 $view->setLayout('root');
 ?>
 
-<head>
-    <link rel="stylesheet" href="<?= $link->asset('/css/customer.css') ?>">
-    <script src="<?= $link->asset('js/customer.js') ?>"></script>
-</head>
+<link rel="stylesheet" href="<?= $link->asset('/css/user/user-panel.css') ?>">
+<script src="<?= $link->asset('js/user-panel.js') ?>"></script>
 
 <div id="background" class="container-fluid">
     <div class="row">

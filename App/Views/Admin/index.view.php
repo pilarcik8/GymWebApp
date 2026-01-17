@@ -5,9 +5,9 @@
 
 ?>
 
-<head>
-    <link rel="stylesheet" href="<?= $link->asset('/css/admin.css') ?>">
-</head>
+
+<link rel="stylesheet" href="<?= $link->asset('/css/user/admin.css') ?>">
+
 
 <div class="container-fluid">
     <div class="row">

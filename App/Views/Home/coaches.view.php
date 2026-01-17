@@ -6,7 +6,7 @@
 $view->setLayout('root');
 ?>
 
-<link rel="stylesheet" href="<?= $link->asset('/css/coaches.css') ?>">
+<link rel="stylesheet" href="<?= $link->asset('/css/home/coaches.css') ?>">
 <script src="<?= $link->asset('/js/coaches.js') ?>"></script>
 
 <!-- Hero -->

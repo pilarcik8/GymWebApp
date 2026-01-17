@@ -5,10 +5,11 @@ body {
 h2 {
     color: #9f9809;
     font-weight: 1000;
-    padding-left: 10%;
-    font-size: 1.75rem;
+    padding-left: 1rem;
+    font-size: 2.5rem;
     margin-top: 1rem;
     align-self: center;
+    text-shadow: 0.3rem 0.3rem 0.3rem #000000;
 }
 
 #title-white-word {

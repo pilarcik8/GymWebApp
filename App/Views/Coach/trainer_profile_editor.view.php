@@ -23,9 +23,8 @@ if ($trainerInfo && $trainerInfo->getImageId()) {
 }
 ?>
 
-<head>
-    <link rel="stylesheet" href="<?= $link->asset('/css/trainer-profile.css') ?>">
-</head>
+
+<link rel="stylesheet" href="<?= $link->asset('/css/user/trainer-profile.css') ?>">
 
 <div class="coach-panel">
     <div class="container">

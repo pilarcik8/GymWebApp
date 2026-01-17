@@ -105,7 +105,7 @@
                             <?php if ($user->getRole() === "customer") { ?>
                                 <li>
                                     <a class="dropdown-item" href="<?= $link->url("customer.index") ?>">
-                                        <i class="fa-solid fa-id-card"></i> Môj účet
+                                        <i class="fa-solid fa-id-card"></i> Tranzakcie
                                     </a>
                                 </li>
                                 <li><hr class="dropdown-divider"></li>

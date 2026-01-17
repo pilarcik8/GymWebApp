@@ -15,18 +15,6 @@ h4 {
     color: #ffffff;
 }
 
-#button-add-amount, #modal-button-send {
-    background: #0ea30e;
-}
-
-#button-add-amount:hover, #modal-button-send:hover {
-    background: #0c8d0c;
-}
-
-#button-add-amount:active, #modal-button-send:active {
-    background: #0a700a;
-}
-
 /* Modal styles */
 .modal-overlay {
     position: fixed;
@@ -75,4 +63,8 @@ h4 {
 #modal-title {
     color: black;
     font-weight: 600;
+}
+
+.button-green{
+    padding:0.25rem;
 }

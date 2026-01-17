@@ -1,0 +1,18 @@
+h2 {
+    color: #9f9809;
+    font-weight: 800;
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    align-self: center;
+    text-shadow: 0 0.1rem 0.1rem #ffffff;
+}
+
+h5 {
+    font-weight: 550;
+}
+
+.card {
+    max-width: 50vw;
+    padding: 1rem;
+    margin-bottom: 1rem;
+}
