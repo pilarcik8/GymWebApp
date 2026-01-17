@@ -197,6 +197,12 @@ class AuthController extends BaseController
             return $this->redirect($this->url("auth.login"));
         }
 
-        return $this->html(compact("message", "email", "first_name", "last_name"));
+        // Načítaj všetky existujúce emaily na klientsku validáciu
+        $allAccounts = Account::getAll();
+        $existingEmails = array_map(static function (Account $acc) {
+            return $acc->getEmail();
+        }, $allAccounts);
+
+        return $this->html(compact("message", "email", "first_name", "last_name", "existingEmails"));
     }
 }

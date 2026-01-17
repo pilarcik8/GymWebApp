@@ -3,6 +3,7 @@
 /** @var string|null $email */
 /** @var string|null $first_name */
 /** @var string|null $last_name */
+/** @var array $existingEmails */
 /** @var \Framework\Support\LinkGenerator $link */
 /** @var \Framework\Support\View $view */
 
@@ -10,6 +11,10 @@ $view->setLayout('root');
 ?>
 
 <link rel="stylesheet" href="<?= $link->asset('/css/auth/register.css') ?>">
+<script>
+    // existujúce emaily pre klientsku validáciu (môže byť prázdne pole)
+    window.existingEmails = <?= json_encode($existingEmails ?? []) ?>;
+</script>
 <script src="<?= $link->asset('js/register.js') ?>"></script>
 
 <div class="register-hero">
