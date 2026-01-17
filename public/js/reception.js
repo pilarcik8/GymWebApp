@@ -32,14 +32,69 @@
 
         if (cancelBtn) cancelBtn.addEventListener('click', closeModal);
 
-        // close when clicking outside modal card
+        // zavri ak kliknes mimo modal
         modal.addEventListener('click', function (e) {
             if (e.target === modal) closeModal();
         });
+    });
 
-        // close on Escape
-        document.addEventListener('keydown', function (e) {
-            if (e.key === 'Escape' && modal.classList.contains('active')) closeModal();
+    // AJAX filtrovanie zákazníkov podľa mena/emailu
+    document.addEventListener('DOMContentLoaded', function () {
+        const searchInput = document.getElementById('customer-search');
+        const tableDiv = document.getElementById('div-table');
+
+        if (!searchInput || !tableDiv) return;
+
+        // Reaguj na zmenu textu v inpute
+        searchInput.addEventListener('input', function () {
+            const query = this.value;
+
+            // počkáme 300 ms
+            clearTimeout(window.searchDebounce);
+            window.searchDebounce = setTimeout(function () {
+                fetchCustomers(query);
+            }, 300);
         });
+
+        // Zavolá server a načíta prefiltrovaný zoznam zákazníkov podľa `query`
+        function fetchCustomers(query) {
+            const xhr = new XMLHttpRequest();
+
+            // aktuálna cesta bez parametrov
+            const basePath = window.location.pathname.split('?')[0] || '/';
+            // parametre pre náš router: controller = reception, action = index a filter = q
+            const url = basePath + '?c=reception&a=index&q=' + encodeURIComponent(query);
+
+            // inicializácia GET požiadavky (asynchrónne)
+            xhr.open('GET', url, true);
+            // označíme požiadavku ako AJAX
+            xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+
+            // Spracovanie odpovede zo servera
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === XMLHttpRequest.DONE) {
+                    if (xhr.status === 200) {
+                        updateTable(xhr.responseText);
+                    } else {
+                        console.error('Error fetching customers:', xhr.status, xhr.statusText);
+                    }
+                }
+            };
+
+            // Odošli požiadavku na server
+            xhr.send();
+        }
+
+        function updateTable(html) {
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(html, 'text/html');
+            const newDiv = doc.getElementById('div-table');
+
+            if (newDiv && tableDiv) {
+                tableDiv.innerHTML = newDiv.innerHTML;
+            } else if (tableDiv) {
+                tableDiv.innerHTML = html;
+            }
+        }
     });
 })();

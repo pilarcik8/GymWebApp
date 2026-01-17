@@ -18,8 +18,19 @@ $view->setLayout('root');
             <div class="text-center text-danger mb-3">
                 <?= @$message ?>
             </div>
+
+            <!-- Filter podľa mena/emailu (AJAX) -->
+            <div class="mb-3">
+                <label for="customer-search" class="form-label">Filtrovať zákazníkov podľa mena alebo emailu</label>
+                <input type="text"
+                       id="customer-search"
+                       class="form-control"
+                       placeholder="Začnite písať meno alebo email"
+                       value="<?= htmlspecialchars($search ?? '', ENT_QUOTES) ?>">
+            </div>
+
             <div id="div-table">
-                <table class="table table-sm table-striped mb-0">
+                <table class="table table-sm table-striped mb-0" id="reception-customers-table">
                     <thead>
                     <tr>
                         <th>Email</th>

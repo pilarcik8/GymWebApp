@@ -41,9 +41,24 @@ class ReceptionController extends BaseController
         $message = $_SESSION['flash_message'] ?? null;
         unset($_SESSION['flash_message']);
 
-        $accounts = Account::getAll('`role` = ?', ['customer']);
+        $search = trim((string)$request->get('q'));
 
-        return $this->html(compact('message', 'accounts'));
+        if ($search !== '') {
+            $like = "%$search%";
+            $accounts = Account::getAll(
+                '`role` = ? AND ((CONCAT_WS(" ", first_name, last_name) LIKE ?) OR email LIKE ?)',
+                [
+                    'customer',
+                    $like,
+                    $like,
+                ]
+            );
+        } else {
+            $accounts = Account::getAll('`role` = ?', ['customer']);
+        }
+
+        // Frontend si z nej vyreže tabuľku podľa #div-table
+        return $this->html(compact('message', 'accounts', 'search'));
     }
 
     public function addCredit(Request $request): Response
