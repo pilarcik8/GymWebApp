@@ -1,3 +1,23 @@
+# Návod na inštaláciu a spustenie aplikácie
+
+1. Na GitHube si stiahnite tento projekt ako ZIP (Code → Download ZIP).
+2. ZIP rozbaľte (odzipujte) do priečinka na vašom počítači (napríklad C:\gym-web-app).
+3. Uistite sa, že máte nainštalovaný Docker Desktop (alebo iný Docker, ktorý podporuje docker-compose).
+4. V termináli prejdite do priečinka docker v projekte
+5. V priečinku docker spustite docker-compose: docker-compose up
+6. Počkajte, kým sa kontajnery spustia. Po spustení:
+   - aplikácia bude dostupná na adrese http://localhost/
+   - Adminer bude na adrese http://localhost:8080/
+7. Projekt môžete otvoriť aj v PhpStorme (alebo inom IDE):
+   - otvoríte priečinok projektu
+   - ako root webovej časti sa používa priečinok public
+   - aplikáciu bežne budete testovať cez http://localhost/ (Docker web server)
+8. Na prihlásenie do aplikácie ako administrátor použite údaje:
+   - email: admin@admin.sk
+   - heslo: admin
+
+
+# FRAMEWORK VAIICKO
 # About
 
 This framework was created to support the teaching of the subject Development of intranet and intranet applications 

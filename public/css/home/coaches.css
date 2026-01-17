@@ -169,3 +169,7 @@ h5 {
 .btn-primary:active {
     border: 0.1rem solid white !important;
 }
+
+.alert {
+    margin-bottom: 1rem;
+}

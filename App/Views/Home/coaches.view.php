@@ -24,6 +24,11 @@ $view->setLayout('root');
     </div>
 <?php endif; ?>
 
+<?php if (empty($coaches)): ?>
+    <div class="alert alert-warning text-center mt-4">
+        Momentálne nemáme žiadnych dostupných trénerov.
+    </div>
+<?php endif; ?>
 <?php foreach ($coaches as $index => $coach): ?>
     <div class="coach-card">
         <div class="coach-card-main">
@@ -66,3 +71,4 @@ $view->setLayout('root');
         </div>
     </div>
 <?php endforeach; ?>
+

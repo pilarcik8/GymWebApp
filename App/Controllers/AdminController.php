@@ -4,6 +4,11 @@ namespace App\Controllers;
 
 use App\Models\Account;
 use App\Models\Image;
+use App\Models\TrainerInfo;
+use App\Models\Training;
+use App\Models\GroupClass;
+use App\Models\GroupClassParticipant;
+use App\Models\Pass;
 use App\Configuration;
 use Framework\Core\BaseController;
 use Framework\Http\Request;
@@ -54,18 +59,30 @@ class AdminController extends BaseController
 
             $account = Account::getOne($id);
             if ($account) {
-                if ($account->getRole() === $role) {
+                $oldRole = $account->getRole();
+                if ($oldRole === $role) {
                     $_SESSION['flash_message'] = "Používateľ #$id už má rolu $role.";
                     return $this->redirect($this->url("admin.index"));
                 }
 
-                if ($account->getRole() === "admin") {
+                if ($oldRole === "admin") {
                     $adminCount = Account::getCount('`role` = ?', ["admin"]);
                     if ($adminCount <= 1 && $role !== "admin") {
                         $_SESSION['flash_message'] = "Nie je možné zmeniť rolu posledného administrátora.";
                         return $this->redirect($this->url("admin.index"));
                     }
                 }
+
+                // Ak odoberáme rolu trénera (zmena z trainer na inú), vyčistiť jeho dáta
+                if ($oldRole === 'trainer' && $role !== 'trainer') {
+                    $this->deleteTrainerData($id);
+                }
+
+                // Ak odoberáme rolu zákazníka (zmena z customer na inú), vyčistiť jeho dáta
+                if ($oldRole === 'customer' && $role !== 'customer') {
+                    $this->deleteCustomerData($id);
+                }
+
                 $account->setRole($role);
                 $account->save();
 
@@ -103,10 +120,68 @@ class AdminController extends BaseController
                 }
             }
 
+            // Vyčistenie dát podľa role používateľa pri mazaní účtu
+            if ($role === 'trainer') {
+                $this->deleteTrainerData($id);
+            }
+
+            if ($role === 'customer') {
+                $this->deleteCustomerData($id);
+            }
+
             $account->delete();
             $_SESSION['flash_message'] = "Používateľ #$id bol vymazaný.";
         }
         return $this->redirect($this->url("admin.index"));
+    }
+
+    private function deleteTrainerData(int $trainerId): void
+    {
+        // zmazať TrainerInfo
+        $infos = TrainerInfo::getAll('`trainer_id` = ?', [$trainerId]);
+        foreach ($infos as $info) {
+            $info->delete();
+        }
+
+        // zmazať osobné tréningy, kde je trénerom
+        $trainings = Training::getAll('`trainer_id` = ?', [$trainerId]);
+        foreach ($trainings as $tr) {
+            $tr->delete();
+        }
+
+        // zmazať skupinové hodiny a ich účastníkov
+        $groupClasses = GroupClass::getAll('`trainer_id` = ?', [$trainerId]);
+        foreach ($groupClasses as $gc) {
+            $gcId = $gc->getId();
+            if ($gcId !== null) {
+                $participants = GroupClassParticipant::getAll('`group_class_id` = ?', [$gcId]);
+                foreach ($participants as $p) {
+                    $p->delete();
+                }
+            }
+            $gc->delete();
+        }
+    }
+
+    private function deleteCustomerData(int $customerId): void
+    {
+        // osobné tréningy ako zákazník
+        $custTrainings = Training::getAll('`customer_id` = ?', [$customerId]);
+        foreach ($custTrainings as $tr) {
+            $tr->delete();
+        }
+
+        // permanentky
+        $passes = Pass::getAll('`user_id` = ?', [$customerId]);
+        foreach ($passes as $pass) {
+            $pass->delete();
+        }
+
+        // skupinové hodiny – účasť zákazníka
+        $parts = GroupClassParticipant::getAll('`customer_id` = ?', [$customerId]);
+        foreach ($parts as $p) {
+            $p->delete();
+        }
     }
 
     /* GALLERY */
@@ -210,9 +285,6 @@ class AdminController extends BaseController
         return $this->redirect($this->url('admin.gallery'));
     }
 
-    /**
-     * Delete image by id (POST deleteGalleryImage)
-     */
     public function deleteGalleryImage(Request $request): Response
     {
         if (!$request->hasValue('deleteGalleryImage')) {
